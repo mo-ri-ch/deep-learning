@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaderboard · Deep Learning, Hands-on</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Kalam:wght@400&family=Patrick+Hand&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem("notebook-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<link rel="stylesheet" href="https://mo-ri-ch.github.io/study-notebook-design/v1/style.css">
+<link rel="stylesheet" href="assets/leaderboard.css">
+</head>
+<body>
+<div class="wrap lb">
+  <header class="topbar">
+    <a class="home" href="./">← Deep Learning, Hands-on</a>
+    <span class="where">Leaderboard</span>
+  </header>
+
+  <main>
+    <div class="lb-head">
+      <h1>🏆 Leaderboard</h1>
+      <div class="lb-status" id="status" aria-live="polite">Loading…</div>
+    </div>
+
+    <div class="lb-code" id="codeBox" hidden>
+      <span class="lb-code-label">Code</span>
+      <span class="lb-code-value" id="code"></span>
+      <span class="lb-code-how">Type it in the last cell of Notebook 3, with your team name.</span>
+    </div>
+
+    <div class="lb-prizes">
+      <div class="card"><h3>🥇 Best score</h3><p id="bestTeam">—</p></div>
+      <div class="card"><h3>🚀 Biggest jump</h3><p id="jumpTeam">—</p></div>
+    </div>
+
+    <table class="lb-table" aria-label="Teams by best score">
+      <thead><tr><th>#</th><th>Team</th><th>Best</th><th>Jump</th><th>Tries</th><th class="lb-changed">What they changed</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="lb-empty" id="empty" hidden>No scores yet. Run the last cell in Notebook 3 to send yours.</p>
+
+    <section class="lb-presenter" id="presenter" hidden aria-label="Presenter controls">
+      <h2>Presenter</h2>
+      <div class="row">
+        <button type="button" class="primary" id="openBtn">Open with a new code</button>
+        <button type="button" id="closeBtn">Close</button>
+        <button type="button" id="clearBtn">Clear the board</button>
+      </div>
+      <p class="lb-note" id="note" aria-live="polite">Only you see these buttons. Opening makes a new code, so codes from another class stop working.</p>
+    </section>
+  </main>
+</div>
+<script src="assets/leaderboard.js"></script>
+</body>
+</html>

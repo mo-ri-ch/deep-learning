@@ -390,10 +390,9 @@ checklist("setup", [
   ["Step 4", "Run the first cell (click ▶ beside it). It should say a GPU was found."],
 ]);
 checklist("ideas", [
-  ["Wider", "More filters in each layer, for example 32 → 64."],
-  ["Deeper", "One more convolution layer."],
+  ["Wider", "More filters in each layer: width 32 → 64."],
+  ["Deeper", "One more convolution layer: extra_layer=True."],
   ["Longer", "More training rounds. Watch the test accuracy, not just training."],
   ["Flip", "Show the network flipped copies of each photo while training, so it sees more variety. This is called <b>data augmentation</b>."],
   ["Rate", "Try learning rate 0.0005 or 0.003 instead of 0.001."],
-  ["Unlock", "When fine-tuning, let the last block of the pretrained network learn too."],
 ]);
