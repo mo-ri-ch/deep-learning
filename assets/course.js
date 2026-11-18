@@ -8,7 +8,7 @@ const COURSE_LESSONS = [
 ];
 
 const NOTEBOOK = "https://colab.research.google.com/github/mo-ri-ch/deep-learning/blob/main/notebooks/deep_learning_hands_on.ipynb";
-const NOTEBOOKS = { 1: NOTEBOOK };   // one notebook, in four parts
+const NOTEBOOKS = { 1: NOTEBOOK };   // one notebook, in four labs
 
 // Tap-to-explain words for this session's code (the shared list is in codewalk.js)
 window.PYWORDS_EXTRA = {
@@ -45,11 +45,11 @@ window.COURSE = {
   webinar: {
     parts: [
       { title: "Deep learning today", sum: "What's new, and the plan.", href: "lessons/session.html#1" },
-      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Notebook Part 1.", href: "lessons/session.html#3" },
-      { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Rock, paper, scissors in Part 2.", href: "lessons/session.html#8" },
+      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Then Lab 1 in the notebook.", href: "lessons/session.html#3" },
+      { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Then Lab 2: rock, paper, scissors.", href: "lessons/session.html#8" },
       { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#13" },
-      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Part 3.", href: "lessons/session.html#16" },
-      { title: "Play against it", sum: "An app that reads your hand from the webcam. Part 4.", href: "lessons/session.html#17" },
+      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Lab 3.", href: "lessons/session.html#16" },
+      { title: "Play against it", sum: "An app that reads your hand from the webcam. Lab 4.", href: "lessons/session.html#17" },
     ],
   },
 };

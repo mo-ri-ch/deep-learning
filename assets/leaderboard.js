@@ -1,4 +1,4 @@
-// leaderboard.js — the live class leaderboard. Scores come from Part 3 of the notebook.
+// leaderboard.js — the live class leaderboard. Scores come from Lab 3 of the notebook.
 // On gradlabs.in the API is on the same site, and a signed-in presenter also gets the controls.
 
 (function () {

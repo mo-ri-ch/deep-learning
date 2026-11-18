@@ -9,7 +9,7 @@
 - "Deep learning right now" (the first page) describes the field in late 2026. Refresh it a few days
   before each session.
 - Two hours, one notebook (Rishal, 18 Nov 2026): one project throughout, rock-paper-scissors on the public
-  photos (no student webcam photos for training). Each notebook part sets itself up, so students can jump in.
+  photos (no student webcam photos for training). The notebook has four labs (Lab 1–4; "Part" means the session page's parts). Each lab sets itself up, so students can jump in.
 - The leaderboard scores the fine-tuned network on the 372 test photos, trained on the same 60 photos
   for every team (pick(..., seed=0)), so it's fair. Board page: leaderboard.html; API: gradlabs.in
   /api/leaderboard/deep-learning (lib/leaderboard.ts in the site repo).

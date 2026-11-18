@@ -95,15 +95,15 @@
       <div class="practice" id="prac1"></div>
     </section>
 
-    <section class="part" data-title="Notebook, Part 1">
-      <h2>Notebook, Part 1: let PyTorch do the maths</h2>
+    <section class="part" data-title="Lab 1: PyTorch">
+      <h2>Lab 1: let PyTorch do the maths</h2>
       <p class="say">Real networks have millions of weights, so nobody works out gradients by hand. <mark>PyTorch</mark>, the most used deep learning library, does it for you: write the loss, call <code>backward()</code>, and every weight gets its gradient.</p>
 <pre><code>w = torch.tensor(0.0, requires_grad=True)
 loss = ((w * x + b - y) ** 2).mean()
 loss.backward()
 print(w.grad)   <span class="c"># the gradient: which way is downhill</span></code></pre>
       <div class="activity">
-        <div class="do">In Part 1 of the notebook you'll fit the same dots, first by hand, then with PyTorch's optimizer.</div>
+        <div class="do">In Lab 1 of the notebook you'll fit the same dots, first by hand, then with PyTorch's optimizer.</div>
         <a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open the notebook in Colab</a>
         <span class="nb-time">about 10 minutes</span>
       </div>
@@ -151,8 +151,8 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       </div>
     </section>
 
-    <section class="part" data-title="Notebook, Part 2">
-      <h2>Notebook, Part 2: rock, paper, scissors</h2>
+    <section class="part" data-title="Lab 2: rock, paper, scissors">
+      <h2>Lab 2: rock, paper, scissors</h2>
       <p class="say">Your first real network: a CNN that looks at a photo of a hand and says rock, paper or scissors.</p>
       <p class="say">It learns from about 2,500 photos. Another 372 are kept aside as the test set, to see how it does on photos it has never seen.</p>
       <div class="activity">
@@ -171,7 +171,7 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
         <div class="do">Compare two ways to learn rock, paper, scissors from the same 60 photos.</div>
         <div class="seg" id="tlSeg" role="group" aria-label="How to train"></div>
         <div id="tl"></div>
-        <p class="example-tag">Example numbers. You'll see your own in Part 3.</p>
+        <p class="example-tag">Example numbers. You'll see your own in Lab 3.</p>
       </div>
     </section>
 
@@ -228,8 +228,8 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       </div>
     </section>
 
-    <section class="part" data-title="Notebook, Part 3">
-      <h2>Notebook, Part 3: fine-tune, then the leaderboard</h2>
+    <section class="part" data-title="Lab 3: the leaderboard">
+      <h2>Lab 3: fine-tune, then the leaderboard</h2>
       <p class="say">First, fine-tune a pretrained network on the same 60 photos. Then, in teams of 3 or 4, get the best test score you can in 15 minutes, still with only those 60 photos. A cell sends your score to the leaderboard on screen. Send as often as you like: your best score counts.</p>
       <p class="say"><b>Two prizes:</b> the best score, and the <b>biggest jump</b> from your first score to your best.</p>
       <div class="activity">
@@ -239,8 +239,8 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       <p class="say"><a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open the notebook in Colab</a> <a class="btn" href="../leaderboard.html" target="_blank" rel="noopener">Open the leaderboard</a></p>
     </section>
 
-        <section class="part" data-title="Notebook, Part 4">
-      <h2>Notebook, Part 4: play against it</h2>
+    <section class="part" data-title="Lab 4: play against it">
+      <h2>Lab 4: play against it</h2>
       <p class="say">A model in a notebook is hard to show anyone. <mark>Gradio</mark> wraps it in a web page in a few lines. This one reads your hand from the webcam and plays the move that beats it.</p>
 <pre><code>def play(image):
     chances = model_scores(image)   <span class="c"># a helper in the notebook</span>
