@@ -47,9 +47,9 @@ window.COURSE = {
       { title: "Deep learning today", sum: "What's new, and the plan.", href: "lessons/session.html#1" },
       { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Then Lab 1 in the notebook.", href: "lessons/session.html#3" },
       { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Then Lab 2: rock, paper, scissors.", href: "lessons/session.html#8" },
-      { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#13" },
-      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Lab 3.", href: "lessons/session.html#16" },
-      { title: "Play against it", sum: "An app that reads your hand from the webcam. Lab 4.", href: "lessons/session.html#17" },
+      { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#14" },
+      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Lab 3.", href: "lessons/session.html#17" },
+      { title: "Play against it", sum: "An app that reads your hand from the webcam. Lab 4.", href: "lessons/session.html#18" },
     ],
   },
 };
