@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Learning, Hands-on</title>
+<meta name="description" content="A 3-hour hands-on session: how a neural network learns, your first network, CNNs, transfer learning and foundation models, all in Colab.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Kalam:wght@400&family=Patrick+Hand&display=swap" rel="stylesheet">
+<script>try{if(localStorage.getItem("notebook-theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+<link rel="stylesheet" href="https://mo-ri-ch.github.io/study-notebook-design/v1/style.css">
+<link rel="stylesheet" href="../assets/talk.css">
+<link rel="stylesheet" href="../assets/dl.css">
+</head>
+<body data-pen="blue">
+<div class="wrap">
+  <header class="topbar">
+    <a class="home" href="../">← Deep Learning, Hands-on</a>
+    <span class="where">Session</span>
+  </header>
+
+  <main data-paged>
+    <div class="paged-head">
+      <h1>Deep Learning, Hands-on</h1>
+      <div class="progress" aria-label="Session parts"></div>
+    </div>
+
+    <!-- ================= Part 1 · Deep learning today ================= -->
+    <section class="part" data-title="Deep learning right now">
+      <h2>Deep learning right now</h2>
+      <p class="say">Chatbots, image generators, voice assistants and coding tools all run on <mark>neural networks</mark>: programs that learn from examples instead of following rules someone wrote.</p>
+      <div class="cards">
+        <div class="card"><h3>New models every month</h3><p>A big new model now comes out almost every month.</p></div>
+        <div class="card"><h3>Models that do things</h3><p>Many new models are built to use tools and write code, not only to chat. These are called <b>agents</b>.</p></div>
+        <div class="card"><h3>Many kinds of input</h3><p>One model can read text, look at images and listen to sound. This is called <b>multimodal</b>.</p></div>
+        <div class="card"><h3>Smaller and cheaper</h3><p>Small models now do jobs that needed huge ones a year ago, at a fraction of the cost.</p></div>
+      </div>
+      <p class="say">Under all of them is one idea you'll build today: <b>a network that learns by correcting its own mistakes.</b> <button class="doubt" data-peek="Things change fast. This page describes the field in late 2026.">🤔</button></p>
+    </section>
+
+    <section class="part" data-title="Today's plan">
+      <h2>Today's plan</h2>
+      <p class="say">Three hours, with short ideas on this page and the coding in Colab: free Python notebooks that run in your browser, on Google's computers.</p>
+      <div class="activity">
+        <div class="do">Get ready: tick each step when it's done.</div>
+        <ul class="week checks" id="setup"></ul>
+      </div>
+      <p class="say"><b>The plan:</b> how a network learns → your first network → seeing images → models that already know a lot → build and share an app.</p>
+    </section>
+
+    <!-- ================= Part 2 · How a network learns ================= -->
+    <section class="part" data-title="A neuron">
+      <h2>A neuron</h2>
+      <p class="say">The smallest part of a network is a <mark>neuron</mark>. It takes a number in, multiplies it by a <b>weight</b>, adds a <b>bias</b>, and gives a number out:</p>
+      <p class="say">The rule: <b class="eqbox">output = weight × input + bias</b><br>With weight 2 and bias 1, an input of 3 gives 2 × 3 + 1 = 7.</p>
+      <div class="activity">
+        <div class="do">These dots are hours studied → test score. Move the sliders until the line passes through the dots.</div>
+        <div class="fit" id="fitA"></div>
+      </div>
+      <p class="say">Learning means finding a weight and bias that fit the examples. You just did it by hand.</p>
+    </section>
+
+    <section class="part" data-title="The loss">
+      <h2>How wrong? The loss</h2>
+      <p class="say">A computer can't look at a picture and say "close enough". It needs one number that says how wrong the line is. That number is called the <mark>loss</mark>.</p>
+      <p class="say">For each dot, take the gap between the guess and the real score, and square it, so a miss below counts the same as a miss above. The loss is the average of those squares.</p>
+      <p class="say">The rule: <b class="eqbox">loss = average of (guess − real)²</b></p>
+      <div class="activity">
+        <div class="do">Move the sliders and watch the loss. Can you get it to 0?</div>
+        <div class="fit" id="fitB"></div>
+      </div>
+    </section>
+
+    <section class="part" data-title="Walk downhill">
+      <h2>Learning: walk downhill</h2>
+      <p class="say">The network can't see the best line either. So it asks: "if I nudge the weight up a little, does the loss go up or down?" That direction is called the <mark>gradient</mark>.</p>
+      <p class="say">Then it takes a small step the other way, downhill, and asks again. This is <b>gradient descent</b>. How big each step is, is called the <b>learning rate</b>.</p>
+      <p class="say">The rule: <b class="eqbox">new weight = weight − learning rate × gradient</b></p>
+      <div class="activity">
+        <div class="do">Start at weight 0, bias 0. Take steps and watch the loss fall. Then try a bigger learning rate.</div>
+        <div id="gd"></div>
+      </div>
+    </section>
+
+    <section class="part" data-nonum data-title="✏️ Practice 1">
+      <h2>✏️ Practice 1</h2>
+      <div class="remember">
+        <p><b>Remember:</b><br>
+        <b class="eqbox">output = weight × input + bias</b><br>
+        <b class="eqbox">loss = average of (guess − real)²</b><br>
+        <b class="eqbox">new weight = weight − learning rate × gradient</b></p>
+      </div>
+      <div class="practice" id="prac1"></div>
+    </section>
+
+    <section class="part" data-title="Notebook 1: PyTorch">
+      <h2>Notebook 1: let PyTorch do the maths</h2>
+      <p class="say">Real networks have millions of weights, so nobody works out gradients by hand. <mark>PyTorch</mark>, the most used deep learning library, does it for you: write the loss, call <code>backward()</code>, and every weight gets its gradient.</p>
+<pre><code>w = torch.tensor(0.0, requires_grad=True)
+loss = ((w * x + b - y) ** 2).mean()
+loss.backward()
+print(w.grad)   <span class="c"># the gradient: which way is downhill</span></code></pre>
+      <div class="activity">
+        <div class="do">In the notebook you'll fit the same dots, first by hand, then with PyTorch's optimizer.</div>
+        <a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open Notebook 1 in Colab</a>
+        <span class="nb-time">about 20 minutes</span>
+      </div>
+    </section>
+
+    <!-- ================= Part 3 · Your first network ================= -->
+    <section class="part" data-title="Layers and ReLU">
+      <h2>Layers, and one small bend</h2>
+      <p class="say">One neuron can only draw a straight line. A network stacks many neurons in <mark>layers</mark>: the outputs of one layer are the inputs of the next.</p>
+      <p class="say">But straight lines added together are still a straight line. So after each neuron there's a tiny bend, called <mark>ReLU</mark>: keep a number if it's above 0, otherwise make it 0.</p>
+      <p class="say">The rule: <b class="eqbox">ReLU(x) = the larger of x and 0</b><br>ReLU(3) = 3, and ReLU(−2) = 0.</p>
+      <div class="activity">
+        <div class="do">These dots make a V. Try to fit them with and without ReLU.</div>
+        <div id="relu"></div>
+      </div>
+    </section>
+
+    <section class="part" data-title="The training loop">
+      <h2>The training loop</h2>
+      <p class="say">Every network, from this one to the biggest chatbot, learns with the same five lines, repeated thousands of times.</p>
+      <div class="activity">
+        <div class="do">Press Next to walk through one pass of the loop.</div>
+        <div id="loop"></div>
+      </div>
+    </section>
+
+    <section class="part" data-title="Overfitting">
+      <h2>Too good to be true: overfitting</h2>
+      <p class="say">We keep some examples aside, called the <mark>test set</mark>. The network never trains on them; they show how it does on new data.</p>
+      <p class="say">Train too long and it starts memorising the training examples instead of learning the pattern. Training accuracy keeps rising, but test accuracy falls. This is called <mark>overfitting</mark>.</p>
+      <div class="activity">
+        <div class="do">Drag through the training rounds. Where would you stop?</div>
+        <div id="over"></div>
+        <p class="example-tag">Example numbers, drawn for this page.</p>
+      </div>
+    </section>
+
+    <section class="part" data-title="Notebook 2: clothes">
+      <h2>Notebook 2: teach a network to recognise clothes</h2>
+      <p class="say">You'll train a network on <b>Fashion-MNIST</b>: 70,000 small grey pictures of 10 kinds of clothing, like shirts, shoes and bags.</p>
+      <p class="say">Each picture is 28 × 28 = 784 numbers, one per pixel. The network takes the 784 numbers in, passes them through two layers with ReLU, and gives 10 scores out, one per kind of clothing.</p>
+      <div class="activity">
+        <div class="do"><b>Your goal:</b> more than 85% right on the test set. Then make it overfit on purpose.</div>
+        <a class="btn primary nb-link" data-nb="2" target="_blank" rel="noopener">Open Notebook 2 in Colab</a>
+        <span class="nb-time">about 35 minutes</span>
+      </div>
+    </section>
+
+    <section class="part" data-nonum data-title="☕ Break">
+      <h2>☕ Break, 10 minutes</h2>
+      <p class="say">Stretch, get water. If your notebook is still training, leave it running.</p>
+      <p class="say">After the break: how networks see pictures, and how to borrow a network someone else already trained.</p>
+    </section>
+
+    <!-- ================= Part 4 · Seeing images ================= -->
+    <section class="part" data-title="Convolution">
+      <h2>Seeing images: convolution</h2>
+      <p class="say">For pictures, networks use a trick. A small grid of weights, called a <mark>filter</mark>, slides over the image. At each spot it multiplies each pixel by the weight on top of it and adds everything up.</p>
+      <p class="say">A big total means "the pattern I look for is here". This filter looks for an edge from bright to dark. A network that learns its own filters this way is a <mark>CNN</mark> <span data-peek="Convolutional neural network.">(convolutional network)</span>.</p>
+      <div class="activity">
+        <div class="do">Slide the filter one step at a time and watch the edge light up.</div>
+        <div id="conv"></div>
+      </div>
+    </section>
+
+    <section class="part" data-title="Transfer learning">
+      <h2>Don't start from zero: transfer learning</h2>
+      <p class="say">Training a big image network from scratch takes millions of pictures. But a network already trained on millions has learned useful filters: edges, textures, shapes.</p>
+      <p class="say">So you keep those layers, and train only a new last layer for your own task. This is <mark>transfer learning</mark>, or <mark>fine-tuning</mark>.</p>
+      <div class="activity">
+        <div class="do">Compare the two ways to get a network for 10 kinds of objects.</div>
+        <div class="seg" id="tlSeg" role="group" aria-label="How to train"></div>
+        <div id="tl"></div>
+        <p class="example-tag">Example numbers, typical of a small project on a free Colab GPU.</p>
+      </div>
+    </section>
+
+    <section class="part" data-title="Notebook 3: images">
+      <h2>Notebook 3: images, a pretrained model and an app</h2>
+      <p class="say">One notebook for the rest of the session:</p>
+      <ol class="howto">
+        <li><span><b>A CNN</b> on CIFAR-10: small colour photos of planes, cars, birds, cats and six more.</span></li>
+        <li><span><b>Fine-tune</b> a pretrained network on the same photos, and compare.</span></li>
+        <li><span><b>Zero-shot</b>: a foundation model that needs no training at all.</span></li>
+        <li><span><b>An app</b> you can share with a link.</span></li>
+      </ol>
+      <div class="activity">
+        <a class="btn primary nb-link" data-nb="3" target="_blank" rel="noopener">Open Notebook 3 in Colab</a>
+        <span class="nb-time">about 60 minutes, with the challenge</span>
+      </div>
+    </section>
+
+    <!-- ================= Part 5 · Foundation models ================= -->
+    <section class="part" data-title="Foundation models">
+      <h2>Models that already know a lot</h2>
+      <p class="say">A <mark>foundation model</mark> is trained once on a huge amount of data, then used for many tasks. The chatbots you use are foundation models.</p>
+      <p class="say">One for images, called <b>CLIP</b>, learned from millions of pictures with captions. Give it a picture and a few labels, and it scores how well each label fits. No training needed. This is called <mark>zero-shot</mark>.</p>
+      <div class="activity">
+        <div class="do">Pick a picture, and see how CLIP would score the labels.</div>
+        <div class="seg" id="clipSeg" role="group" aria-label="Picture"></div>
+        <div id="clip"></div>
+        <p class="example-tag">Example scores, written for this page. You'll get real ones in Notebook 3.</p>
+      </div>
+    </section>
+
+    <section class="part" data-nonum data-title="✏️ Practice 2">
+      <h2>✏️ Practice 2</h2>
+      <p class="say">Which idea fits each situation?</p>
+      <div class="quiz" data-right="Yes. Training is high but test is falling: it's memorising. Stop earlier, or use more data.">
+        <div class="q">Training accuracy: 99%. Test accuracy: 71%, and it drops every round.</div>
+        <div class="options">
+          <button data-why="A higher learning rate changes the step size. The problem here is memorising, not slow steps.">Raise the learning rate</button>
+          <button data-right>It's overfitting: stop earlier</button>
+          <button data-why="More training rounds would make the memorising worse.">Train for more rounds</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz" data-right="Yes. With few pictures, start from a network that has already learned edges and shapes.">
+        <div class="q">You have 300 photos of 3 kinds of leaves, and one free GPU for an hour.</div>
+        <div class="options">
+          <button data-right>Fine-tune a pretrained network</button>
+          <button data-why="300 photos is far too few to learn good filters from zero.">Train a big CNN from scratch</button>
+          <button data-why="Pixels in a long row lose which pixels are next to each other, so it learns shapes badly.">A network of plain layers on the pixels</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz" data-right="Yes. Each step went so far that it overshot the bottom, further each time.">
+        <div class="q">The loss goes 57 → 106 → 198 → 1290. What's wrong?</div>
+        <div class="options">
+          <button data-why="Too few rounds would mean the loss falls slowly, not that it grows.">Too few training rounds</button>
+          <button data-why="Overfitting shows on the test set; here the training loss itself is exploding.">Overfitting</button>
+          <button data-right>The learning rate is too big</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+      <div class="quiz" data-right="Yes. Zero-shot: just give the labels, no training.">
+        <div class="q">You need to sort 1,000 photos into "beach", "city" and "forest" today, with no labelled examples.</div>
+        <div class="options">
+          <button data-why="Fine-tuning needs labelled examples, and you have none.">Fine-tune a network</button>
+          <button data-right>Zero-shot with CLIP</button>
+          <button data-why="A new network needs many labelled examples to learn from.">Train a CNN</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ================= Part 6 · Build and share ================= -->
+    <section class="part" data-title="Mini challenge">
+      <h2>Mini challenge: beat the CNN</h2>
+      <p class="say">In Notebook 3, get the best test accuracy you can on CIFAR-10 in 15 minutes. Call out your score when time's up.</p>
+      <div class="activity">
+        <div class="do">Ideas to try. Change one thing at a time, so you know what helped.</div>
+        <ul class="week checks" id="ideas"></ul>
+      </div>
+    </section>
+
+    <section class="part" data-title="Share it as an app">
+      <h2>Share it as an app</h2>
+      <p class="say">A model in a notebook is hard to show anyone. <mark>Gradio</mark> wraps it in a web page in a few lines: upload a picture, see the answer.</p>
+<pre><code>import gradio as gr
+
+def predict(image):
+    scores = model_scores(image)   <span class="c"># a helper in the notebook</span>
+    return {name: score for name, score in zip(CLASSES, scores)}
+
+gr.Interface(predict, gr.Image(type="pil"), gr.Label(num_top_classes=3)).launch(share=True)</code></pre>
+      <p class="say"><code>share=True</code> gives a public link that works for about three days. Send it to a friend.</p>
+    </section>
+
+    <section class="part" data-title="Where to go next">
+      <h2>Where to go next</h2>
+      <div class="cards">
+        <div class="card"><h3>Text</h3><p>The same ideas power language models. Look up <b>transformers</b> and <b>attention</b> next.</p></div>
+        <div class="card"><h3>Your own data</h3><p>Fine-tune a pretrained model on photos you take yourself. Fifty per kind is a good start.</p></div>
+        <div class="card"><h3>Small models</h3><p>Run a small open model on your laptop, and see what it can do without the cloud.</p></div>
+        <div class="card"><h3>Keep practising</h3><p>Rerun these notebooks with a new dataset each week. The official PyTorch tutorials are a good next step.</p></div>
+      </div>
+    </section>
+
+    <section class="part" data-title="Questions?">
+      <h2>Questions?</h2>
+      <p class="say">Thanks for joining! Ask anything now.</p>
+      <p class="say">This page stays here after the session. Come back to try the activities again, and run the notebooks at your own pace.</p>
+      <div class="cards">
+        <div class="card"><h3>The notebooks</h3>
+          <p><a class="nb-link" data-nb="1" target="_blank" rel="noopener">1 · PyTorch basics →</a><br>
+          <a class="nb-link" data-nb="2" target="_blank" rel="noopener">2 · Your first network →</a><br>
+          <a class="nb-link" data-nb="3" target="_blank" rel="noopener">3 · Images, fine-tuning and an app →</a></p></div>
+        <div class="card"><h3>Remember</h3><p>Guess → loss → gradient → small step downhill. Repeat. That's how every network learns.</p></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="pagebar" aria-label="Move between parts">
+  <div class="inner">
+    <button data-page-back>← Previous</button>
+    <span data-page-label></span>
+    <button class="primary" data-page-next>Next →</button>
+  </div>
+</nav>
+
+<script src="../assets/course.js"></script>
+<script src="https://mo-ri-ch.github.io/study-notebook-design/v1/common.js"></script>
+<script src="https://mo-ri-ch.github.io/study-notebook-design/v1/pen.js"></script>
+<script src="https://mo-ri-ch.github.io/study-notebook-design/v1/guide.js"></script>
+<script src="https://mo-ri-ch.github.io/study-notebook-design/v1/codewalk.js"></script>
+<script src="../assets/dl.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+/* dl.css — styles for this session's own activities. Colours only through the shared variables. */
+
+/* Charts */
+.chart { width: 100%; height: auto; display: block; max-height: 250px; }
+.chart .grid line { stroke: color-mix(in srgb, var(--ink) 10%, transparent); }
+.chart .axis { stroke: var(--ink); stroke-width: 1.5; }
+.chart .tick { font-family: var(--mono); font-size: 12px; fill: var(--pencil); }
+.chart .axis-label { font-family: var(--hand); font-size: 15px; fill: var(--pencil); }
+.chart .dot { fill: var(--pen); stroke: var(--paper); stroke-width: 2; }
+.chart .fitline { stroke: var(--good); stroke-width: 3; fill: none; stroke-linecap: round; }
+.chart .gap { stroke: var(--redpen); stroke-width: 2; stroke-dasharray: 4 3; }
+.chart .part { fill: none; stroke-width: 2; stroke-dasharray: 6 4; }
+.chart .part.a { stroke: var(--pen); }
+.chart .part.b { stroke: var(--redpen); }
+.chart .curve { fill: none; stroke-width: 3; stroke-linejoin: round; }
+.chart .curve.train { stroke: var(--pen); }
+.chart .curve.test { stroke: var(--redpen); }
+.chart .key { font-family: var(--hand); font-size: 15px; }
+.chart .key.train { fill: var(--pen); }
+.chart .key.test { fill: var(--redpen); }
+.chart .best { stroke: var(--good); stroke-width: 2; stroke-dasharray: 5 4; }
+
+/* Sliders */
+.sliders { display: grid; gap: 6px; margin: 8px 0; }
+.sliders label, .slider-row { display: grid; grid-template-columns: 4.5em 1fr 3em; gap: 10px; align-items: center; font-family: var(--head); font-size: 1.1rem; }
+.slider-row { grid-template-columns: 8.5em 1fr 2.5em; margin: 8px 0; }
+.sliders input, .slider-row input { accent-color: var(--pen); width: 100%; }
+.sliders output, .slider-row output { font-family: var(--mono); font-size: 0.95rem; text-align: right; }
+.worked { font-family: var(--mono); font-size: 0.88rem; line-height: 1.6; margin: 8px 0 0; }
+.fit-note { margin: 6px 0 0; color: var(--pencil); }
+
+/* Loss table */
+.loss-table { border-collapse: collapse; font-family: var(--mono); font-size: 0.85rem; margin: 8px 0 0; }
+.loss-table th, .loss-table td { padding: 2px 12px; text-align: right; border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.loss-table th { font-family: var(--head); font-weight: normal; font-size: 1rem; color: var(--pencil); }
+.loss-table td:last-child { background: color-mix(in srgb, var(--hl-yellow) 30%, transparent); }
+.loss-line { margin: 6px 0 0; }
+
+/* Gradient descent */
+.gd-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.gd-top .label-sm { margin: 0; }
+.gd-btns { margin-top: 6px; }
+.gd-math { font-family: var(--mono); font-size: 0.86rem; line-height: 1.6; margin-top: 8px; min-height: 5.6em; }
+.gd-math .verdict { font-family: var(--body, inherit); }
+#homeGd .gd-math { min-height: 1.6em; font-family: var(--head); font-size: 1.15rem; }
+
+/* Remember block and practice */
+.remember { background: var(--note-yellow); color: var(--ink); padding: 10px 16px; border-radius: 3px; margin: 8px 0 14px; }
+.remember p { margin: 0; line-height: 2; }
+.practice .prob { padding: 8px 0; border-bottom: 1px dashed color-mix(in srgb, var(--ink) 20%, transparent); }
+.practice .prob:last-of-type { border-bottom: 0; }
+.practice .q { margin: 0 0 6px; }
+.practice input { font: inherit; padding: 4px 8px; border: 2px solid var(--ink); border-radius: 6px; background: var(--paper); color: var(--ink); width: 7em; }
+.practice .fb { margin: 6px 0 0; min-height: 1.2em; font-size: 0.95rem; }
+.practice .fb.good { color: var(--good); font-weight: 700; }
+.practice .fb.bad { color: var(--redpen); }
+
+/* Training loop */
+.loop-code .ln { display: inline-block; min-width: 100%; padding: 0 4px; border-radius: 3px; }
+.loop-code .ln.now { background: rgba(255, 228, 92, 0.25); }
+.loop-say { min-height: 4.8em; margin: 8px 0; }
+
+/* Convolution grids */
+.conv-row { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.conv-row .label-sm { margin: 0 0 6px; font-size: 0.95rem; }
+.grid { display: grid; gap: 3px; }
+.grid.g6 { grid-template-columns: repeat(6, 2em); }
+.grid.g3 { grid-template-columns: repeat(3, 2em); }
+.grid.g4 { grid-template-columns: repeat(4, 2em); }
+.grid .cell { height: 2em; display: grid; place-items: center; font-family: var(--mono); font-size: 0.85rem; border-radius: 3px;
+  border: 1px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+.grid .cell.lit { background: var(--hl-yellow); color: var(--on-hl); }
+.grid .cell.dark { background: var(--code-bg); color: var(--code-ink); }
+.grid .cell.win { outline: 3px solid var(--pen); outline-offset: -1px; }
+.grid .cell.fp { background: var(--hl-green); color: var(--on-hl); }
+.grid .cell.fn { background: var(--hl-pink); color: var(--on-hl); }
+.grid .cell.fz { background: var(--card); }
+.grid .cell.hot { background: var(--hl-yellow); color: var(--on-hl); font-weight: 700; }
+.grid .cell.empty { border-style: dashed; }
+.conv-sum { min-height: 6.6em; }
+
+/* Transfer learning */
+.layers { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0; }
+.layer-box { border: 2px solid var(--ink); border-radius: 6px; padding: 6px 10px; display: grid; gap: 2px; font-family: var(--head); font-size: 1.05rem; min-width: 6.5em; }
+.layer-box .tag { font-family: var(--body, inherit); font-size: 0.8rem; }
+.layer-box.learn { background: var(--note-green); }
+.layer-box.frozen { background: var(--note-blue); border-style: dashed; }
+.layers .arrow { color: var(--pencil); }
+.tl-table { border-collapse: collapse; margin: 6px 0; }
+.tl-table th { text-align: left; font-family: var(--head); font-weight: normal; padding: 2px 16px 2px 0; color: var(--pencil); }
+
+/* CLIP */
+.clip-row { display: grid; grid-template-columns: 5.5em 1fr; gap: 16px; align-items: center; margin-top: 12px; }
+.clip-pic { font-size: 4.2rem; text-align: center; background: var(--card); border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); border-radius: 6px; line-height: 1.4; }
+.clip-row .nw-bar { grid-template-columns: 10.5em 1fr 3em; }
+
+/* Checklists: wider label column */
+.week.checks label { grid-template-columns: 1.4em 4.2em 1fr; }
+
+/* Notebook buttons */
+.nb-time { margin-left: 12px; color: var(--pencil); font-size: 0.95rem; }
+
+/* Home: a smaller chart */
+#homeGd .chart { max-height: 210px; }
+@media (min-width: 521px) { #wParts { grid-template-columns: repeat(3, 1fr); max-width: 980px; } }
+
+@media (max-width: 520px) {
+  .clip-row { grid-template-columns: 1fr; }
+  .clip-row .nw-bar { grid-template-columns: 8.5em 1fr 3em; }
+  .grid.g6, .grid.g4, .grid.g3 { grid-auto-rows: 1.7em; }
+  .grid.g6 { grid-template-columns: repeat(6, 1.7em); } .grid.g4 { grid-template-columns: repeat(4, 1.7em); } .grid.g3 { grid-template-columns: repeat(3, 1.7em); }
+  .grid .cell { height: 1.7em; }
+}
+
+/* The loss: chart and sliders on the left, the table on the right */
+@media (min-width: 761px) {
+  .fit.with-loss { display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; align-items: start; }
+  .fit.with-loss .worked { margin-top: 0; }
+}
+.chart .dot.test { fill: var(--redpen); }
