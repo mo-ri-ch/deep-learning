@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deep Learning, Hands-on</title>
-<meta name="description" content="A 3-hour hands-on session: how a neural network learns, your first network, CNNs, transfer learning and foundation models, all in Colab.">
+<meta name="description" content="A hands-on session: how a neural network learns, a CNN for rock, paper, scissors, transfer learning and a class leaderboard, all in Colab.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,12 +42,12 @@
 
     <section class="part" data-title="Today's plan">
       <h2>Today's plan</h2>
-      <p class="say">Three hours, with short ideas on this page and the coding in Colab: free Python notebooks that run in your browser, on Google's computers.</p>
+      <p class="say">Two hours, with short ideas on this page and the coding in one Colab notebook. Colab runs Python in your browser, on Google's computers, for free.</p>
       <div class="activity">
         <div class="do">Get ready: tick each step when it's done.</div>
         <ul class="week checks" id="setup"></ul>
       </div>
-      <p class="say"><b>The plan:</b> how a network learns → your first network → seeing images → models that already know a lot → build and share an app.</p>
+      <p class="say"><b>The plan:</b> how a network learns → a network that tells rock, paper and scissors apart → borrow a trained network → the leaderboard → play against it.</p>
     </section>
 
     <!-- ================= Part 2 · How a network learns ================= -->
@@ -95,21 +95,21 @@
       <div class="practice" id="prac1"></div>
     </section>
 
-    <section class="part" data-title="Notebook 1: PyTorch">
-      <h2>Notebook 1: let PyTorch do the maths</h2>
+    <section class="part" data-title="Notebook, Part 1">
+      <h2>Notebook, Part 1: let PyTorch do the maths</h2>
       <p class="say">Real networks have millions of weights, so nobody works out gradients by hand. <mark>PyTorch</mark>, the most used deep learning library, does it for you: write the loss, call <code>backward()</code>, and every weight gets its gradient.</p>
 <pre><code>w = torch.tensor(0.0, requires_grad=True)
 loss = ((w * x + b - y) ** 2).mean()
 loss.backward()
 print(w.grad)   <span class="c"># the gradient: which way is downhill</span></code></pre>
       <div class="activity">
-        <div class="do">In the notebook you'll fit the same dots, first by hand, then with PyTorch's optimizer.</div>
-        <a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open Notebook 1 in Colab</a>
-        <span class="nb-time">about 20 minutes</span>
+        <div class="do">In Part 1 of the notebook you'll fit the same dots, first by hand, then with PyTorch's optimizer.</div>
+        <a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open the notebook in Colab</a>
+        <span class="nb-time">about 10 minutes</span>
       </div>
     </section>
 
-    <!-- ================= Part 3 · Your first network ================= -->
+    <!-- ================= Part 3 · Networks and images ================= -->
     <section class="part" data-title="Layers and ReLU">
       <h2>Layers, and one small bend</h2>
       <p class="say">One neuron can only draw a straight line. A network stacks many neurons in <mark>layers</mark>: the outputs of one layer are the inputs of the next.</p>
@@ -141,24 +141,6 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       </div>
     </section>
 
-    <section class="part" data-title="Notebook 2: clothes">
-      <h2>Notebook 2: teach a network to recognise clothes</h2>
-      <p class="say">You'll train a network on <b>Fashion-MNIST</b>: 70,000 small grey pictures of 10 kinds of clothing, like shirts, shoes and bags.</p>
-      <p class="say">Each picture is 28 × 28 = 784 numbers, one per pixel. The network takes the 784 numbers in, passes them through two layers with ReLU, and gives 10 scores out, one per kind of clothing.</p>
-      <div class="activity">
-        <div class="do"><b>Your goal:</b> more than 85% right on the test set. Then make it overfit on purpose.</div>
-        <a class="btn primary nb-link" data-nb="2" target="_blank" rel="noopener">Open Notebook 2 in Colab</a>
-        <span class="nb-time">about 35 minutes</span>
-      </div>
-    </section>
-
-    <section class="part" data-nonum data-title="☕ Break">
-      <h2>☕ Break, 10 minutes</h2>
-      <p class="say">Stretch, get water. If your notebook is still training, leave it running.</p>
-      <p class="say">After the break: how networks see pictures, and how to borrow a network someone else already trained.</p>
-    </section>
-
-    <!-- ================= Part 4 · Seeing images ================= -->
     <section class="part" data-title="Convolution">
       <h2>Seeing images: convolution</h2>
       <p class="say">For pictures, networks use a trick. A small grid of weights, called a <mark>filter</mark>, slides over the image. At each spot it multiplies each pixel by the weight on top of it and adds everything up.</p>
@@ -169,34 +151,30 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       </div>
     </section>
 
+    <section class="part" data-title="Notebook, Part 2">
+      <h2>Notebook, Part 2: rock, paper, scissors</h2>
+      <p class="say">Your first real network: a CNN that looks at a photo of a hand and says rock, paper or scissors.</p>
+      <p class="say">It learns from about 2,500 photos. Another 372 are kept aside as the test set, to see how it does on photos it has never seen.</p>
+      <div class="activity">
+        <div class="do">Train it twice: once on all 2,500 photos, then on only 60. Guess first: how much worse will 60 be?</div>
+        <a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open the notebook in Colab</a>
+        <span class="nb-time">about 15 minutes</span>
+      </div>
+    </section>
+
+    <!-- ================= Part 4 · Borrow a trained network ================= -->
     <section class="part" data-title="Transfer learning">
       <h2>Don't start from zero: transfer learning</h2>
       <p class="say">Training a big image network from scratch takes millions of pictures. But a network already trained on millions has learned useful filters: edges, textures, shapes.</p>
       <p class="say">So you keep those layers, and train only a new last layer for your own task. This is <mark>transfer learning</mark>, or <mark>fine-tuning</mark>.</p>
       <div class="activity">
-        <div class="do">Compare the two ways to get a network for 10 kinds of objects.</div>
+        <div class="do">Compare two ways to learn rock, paper, scissors from the same 60 photos.</div>
         <div class="seg" id="tlSeg" role="group" aria-label="How to train"></div>
         <div id="tl"></div>
-        <p class="example-tag">Example numbers, typical of a small project on a free Colab GPU.</p>
+        <p class="example-tag">Example numbers. You'll see your own in Part 3.</p>
       </div>
     </section>
 
-    <section class="part" data-title="Notebook 3: images">
-      <h2>Notebook 3: images, a pretrained model and an app</h2>
-      <p class="say">One notebook for the rest of the session:</p>
-      <ol class="howto">
-        <li><span><b>A CNN</b> on CIFAR-10: small colour photos of planes, cars, birds, cats and six more.</span></li>
-        <li><span><b>Fine-tune</b> a pretrained network on the same photos, and compare.</span></li>
-        <li><span><b>Zero-shot</b>: a foundation model that needs no training at all.</span></li>
-        <li><span><b>An app</b> you can share with a link.</span></li>
-      </ol>
-      <div class="activity">
-        <a class="btn primary nb-link" data-nb="3" target="_blank" rel="noopener">Open Notebook 3 in Colab</a>
-        <span class="nb-time">about 60 minutes, with the challenge</span>
-      </div>
-    </section>
-
-    <!-- ================= Part 5 · Foundation models ================= -->
     <section class="part" data-title="Foundation models">
       <h2>Models that already know a lot</h2>
       <p class="say">A <mark>foundation model</mark> is trained once on a huge amount of data, then used for many tasks. The chatbots you use are foundation models.</p>
@@ -205,7 +183,7 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
         <div class="do">Pick a picture, and see how CLIP would score the labels.</div>
         <div class="seg" id="clipSeg" role="group" aria-label="Picture"></div>
         <div id="clip"></div>
-        <p class="example-tag">Example scores, written for this page. You'll get real ones in Notebook 3.</p>
+        <p class="example-tag">Example scores, written for this page. The bonus at the end of the notebook tries CLIP on the hand photos.</p>
       </div>
     </section>
 
@@ -250,53 +228,49 @@ print(w.grad)   <span class="c"># the gradient: which way is downhill</span></co
       </div>
     </section>
 
-    <!-- ================= Part 6 · Build and share ================= -->
-    <section class="part" data-title="Mini challenge">
-      <h2>Mini challenge: the leaderboard</h2>
-      <p class="say">In teams of 3 or 4, make the CNN in Notebook 3 as accurate as you can, in 15 minutes. The last cell sends your score to the leaderboard on screen. Send as often as you like: your best score counts.</p>
+    <section class="part" data-title="Notebook, Part 3">
+      <h2>Notebook, Part 3: fine-tune, then the leaderboard</h2>
+      <p class="say">First, fine-tune a pretrained network on the same 60 photos. Then, in teams of 3 or 4, get the best test score you can in 15 minutes, still with only those 60 photos. A cell sends your score to the leaderboard on screen. Send as often as you like: your best score counts.</p>
       <p class="say"><b>Two prizes:</b> the best score, and the <b>biggest jump</b> from your first score to your best.</p>
       <div class="activity">
         <div class="do">Ideas to try. Change one thing at a time, so you know what helped.</div>
         <ul class="week checks" id="ideas"></ul>
       </div>
-      <p class="say"><a class="btn" href="../leaderboard.html" target="_blank" rel="noopener">Open the leaderboard</a></p>
+      <p class="say"><a class="btn primary nb-link" data-nb="1" target="_blank" rel="noopener">Open the notebook in Colab</a> <a class="btn" href="../leaderboard.html" target="_blank" rel="noopener">Open the leaderboard</a></p>
     </section>
 
-    <section class="part" data-title="Share it as an app">
-      <h2>Share it as an app</h2>
-      <p class="say">A model in a notebook is hard to show anyone. <mark>Gradio</mark> wraps it in a web page in a few lines: upload a picture, see the answer.</p>
-<pre><code>import gradio as gr
+        <section class="part" data-title="Notebook, Part 4">
+      <h2>Notebook, Part 4: play against it</h2>
+      <p class="say">A model in a notebook is hard to show anyone. <mark>Gradio</mark> wraps it in a web page in a few lines. This one reads your hand from the webcam and plays the move that beats it.</p>
+<pre><code>def play(image):
+    chances = model_scores(image)   <span class="c"># a helper in the notebook</span>
+    you = GESTURES[np.argmax(chances)]
+    return f"I see {you}, so I play {BEATS[you]}. I win!"
 
-def predict(image):
-    scores = model_scores(image)   <span class="c"># a helper in the notebook</span>
-    return {name: score for name, score in zip(CLASSES, scores)}
-
-gr.Interface(predict, gr.Image(type="pil"), gr.Label(num_top_classes=3)).launch(share=True)</code></pre>
-      <p class="say"><code>share=True</code> gives a public link that works for about three days. Send it to a friend.</p>
+gr.Interface(play, gr.Image(sources=["webcam", "upload"]), gr.Textbox()).launch(share=True)</code></pre>
+      <p class="say">If it reads your hand wrong, <b>you</b> win. It learned from computer-drawn hands on white backgrounds: can you fool it? <code>share=True</code> gives a link that works on your phone for about three days.</p>
     </section>
 
     <section class="part" data-title="Where to go next">
       <h2>Where to go next</h2>
       <div class="cards">
         <div class="card"><h3>Text</h3><p>The same ideas power language models. Look up <b>transformers</b> and <b>attention</b> next.</p></div>
-        <div class="card"><h3>Your own data</h3><p>Fine-tune a pretrained model on photos you take yourself. Fifty per kind is a good start.</p></div>
+        <div class="card"><h3>Your own data</h3><p>Take 30 photos of your own hand for each gesture and add them to the training set. Does it get harder to fool?</p></div>
         <div class="card"><h3>Small models</h3><p>Run a small open model on your laptop, and see what it can do without the cloud.</p></div>
-        <div class="card"><h3>Keep practising</h3><p>Rerun these notebooks with a new dataset each week. The official PyTorch tutorials are a good next step.</p></div>
+        <div class="card"><h3>Keep practising</h3><p>Run the notebook again with a new dataset each week. The official PyTorch tutorials are a good next step.</p></div>
       </div>
     </section>
 
     <section class="part" data-title="Questions?">
       <h2>Questions?</h2>
       <p class="say">Thanks for joining! Ask anything now.</p>
-      <p class="say">This page stays here after the session. Come back to try the activities again, and run the notebooks at your own pace.</p>
+      <p class="say">This page stays here after the session. Come back to try the activities again, and run the notebook at your own pace.</p>
       <div class="cards">
-        <div class="card"><h3>The notebooks</h3>
-          <p><a class="nb-link" data-nb="1" target="_blank" rel="noopener">1 · PyTorch basics →</a><br>
-          <a class="nb-link" data-nb="2" target="_blank" rel="noopener">2 · Your first network →</a><br>
-          <a class="nb-link" data-nb="3" target="_blank" rel="noopener">3 · Images, fine-tuning and an app →</a></p></div>
+        <div class="card"><h3>The notebook</h3><p><a class="nb-link" data-nb="1" target="_blank" rel="noopener">Open it in Colab →</a><br>Run it again at home, and try the ideas from the challenge.</p></div>
         <div class="card"><h3>Remember</h3><p>Guess → loss → gradient → small step downhill. Repeat. That's how every network learns.</p></div>
       </div>
     </section>
+
   </main>
 </div>
 

@@ -7,12 +7,8 @@ const COURSE_LESSONS = [
     summary: "Everything from the hands-on session.", leaves: null },
 ];
 
-const NB = n => `https://colab.research.google.com/github/mo-ri-ch/deep-learning/blob/main/notebooks/${n}`;
-const NOTEBOOKS = {
-  1: NB("1_pytorch_basics.ipynb"),
-  2: NB("2_first_network.ipynb"),
-  3: NB("3_images_and_apps.ipynb"),
-};
+const NOTEBOOK = "https://colab.research.google.com/github/mo-ri-ch/deep-learning/blob/main/notebooks/deep_learning_hands_on.ipynb";
+const NOTEBOOKS = { 1: NOTEBOOK };   // one notebook, in four parts
 
 // Tap-to-explain words for this session's code (the shared list is in codewalk.js)
 window.PYWORDS_EXTRA = {
@@ -27,7 +23,13 @@ window.PYWORDS_EXTRA = {
   "Interface": { what: "Builds the web app: your function, what goes in (an image), and what comes out (labels with scores).", ex: "gr.Interface(fn, gr.Image(), gr.Label())", out: "(an app, shown by .launch())" },
   "launch": { what: "Starts the app. With share=True it also gives a public link.", ex: "app.launch(share=True)", out: "Running on public URL: https://….gradio.live" },
   "zip": { what: "Walks through two lists side by side, in pairs.", ex: "for a, b in zip([\"x\", \"y\"], [1, 2]):\n    print(a, b)", out: "x 1\ny 2" },
-  "model_scores": { what: "A small helper in the notebook: runs the trained model on one picture and returns a chance for each kind of object.", ex: "model_scores(photo)", out: "[0.91, 0.02, …]   (10 chances)" },
+  "model_scores": { what: "A small helper in the notebook: runs your trained network on one photo and returns a chance for each gesture.", ex: "model_scores(photo)", out: "[0.03, 0.94, 0.03]   (paper, rock, scissors)" },
+  "np": { what: "NumPy, the usual Python library for lists of numbers. We imported it as np.", ex: "import numpy as np\nprint(np.argmax([0.1, 0.7, 0.2]))", out: "1" },
+  "argmax": { what: "The position of the biggest number: which gesture got the highest chance.", ex: "import numpy as np\nprint(np.argmax([0.1, 0.7, 0.2]))", out: "1" },
+  "GESTURES": { what: "The three answers, in order: paper, rock, scissors.", ex: "print(GESTURES[1])", out: "rock" },
+  "BEATS": { what: "Which move beats which: rock → paper, paper → scissors, scissors → rock.", ex: "print(BEATS[\"rock\"])", out: "paper" },
+  "Image": { what: "Gradio's photo input. sources=[\"webcam\", \"upload\"] lets you take a photo or pick a file.", ex: "gr.Image(sources=[\"webcam\", \"upload\"])", out: "(a photo box in the app)" },
+  "Textbox": { what: "Gradio's text output: where the app writes its answer.", ex: "gr.Textbox()", out: "(a text box in the app)" },
 };
 
 window.COURSE = {
@@ -35,19 +37,19 @@ window.COURSE = {
   pathLabel: "The session",
   lessons: COURSE_LESSONS,
   support: false,                  // no support note inside a session
-  colab: NOTEBOOKS[1],
+  colab: NOTEBOOK,
   notebooks: NOTEBOOKS,
   setup: [],
 
   // Read by webinar.js on the home page
   webinar: {
     parts: [
-      { title: "Deep learning today", sum: "What's new, and today's plan.", href: "lessons/session.html#1" },
-      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Notebook 1.", href: "lessons/session.html#3" },
-      { title: "Your first network", sum: "Layers, the training loop and overfitting. Notebook 2.", href: "lessons/session.html#8" },
-      { title: "Seeing images", sum: "Convolution and transfer learning. Notebook 3.", href: "lessons/session.html#13" },
-      { title: "Foundation models", sum: "Models that already know a lot, with no training.", href: "lessons/session.html#16" },
-      { title: "Build and share", sum: "A mini challenge, and your model as a web app.", href: "lessons/session.html#18" },
+      { title: "Deep learning today", sum: "What's new, and the plan.", href: "lessons/session.html#1" },
+      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Notebook Part 1.", href: "lessons/session.html#3" },
+      { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Rock, paper, scissors in Part 2.", href: "lessons/session.html#8" },
+      { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#13" },
+      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Part 3.", href: "lessons/session.html#16" },
+      { title: "Play against it", sum: "An app that reads your hand from the webcam. Part 4.", href: "lessons/session.html#17" },
     ],
   },
 };

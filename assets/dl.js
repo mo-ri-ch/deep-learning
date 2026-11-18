@@ -336,17 +336,17 @@ practice("prac1", [
 // ---------- Transfer learning: from scratch vs fine-tune ----------
 (function transfer() {
   const box = $("tl"); if (!box) return;
-  const LAYERS = ["edges", "textures", "shapes", "object parts", "10 kinds (new)"];
+  const LAYERS = ["edges", "textures", "shapes", "object parts", "3 gestures (new)"];
   const WAYS = [
-    { learns: [1, 1, 1, 1, 1], pics: "about 50,000", time: "about 30 minutes", acc: "about 75%" },
-    { learns: [0, 0, 0, 0, 1], pics: "about 10,000", time: "about 5 minutes", acc: "about 85%" },
+    { learns: [1, 1, 1, 1, 1], pics: "60 (20 per gesture)", time: "about a minute", acc: "about 60%" },
+    { learns: [0, 0, 0, 0, 1], pics: "the same 60", time: "about a minute", acc: "about 90%" },
   ];
   seg("tlSeg", ["Train from scratch", "Fine-tune a pretrained one"], i => {
     const w = WAYS[i];
     box.innerHTML = `<div class="layers">${LAYERS.map((l, k) => `<div class="layer-box ${w.learns[k] ? "learn" : "frozen"}">
         <span>${esc(l)}</span><span class="tag">${w.learns[k] ? "✏️ learns" : "🔒 kept as is"}</span></div>`).join('<span class="arrow" aria-hidden="true">→</span>')}</div>
       <table class="tl-table"><tr><th>Pictures needed</th><td>${w.pics}</td></tr><tr><th>Training time</th><td>${w.time}</td></tr><tr><th>Test accuracy</th><td><b>${w.acc}</b></td></tr></table>
-      <p class="worked">${i ? "Only the last layer starts from zero. Everything else was learned from over a million photos." : "Every layer starts from random weights and must learn edges, textures and shapes from your photos alone."}</p>`;
+      <p class="worked">${i ? "Only the last layer starts from zero. Everything else was learned from over a million photos." : "Every layer starts from random weights and must learn edges, textures and shapes from 60 photos alone."}</p>`;
   });
   reset($("tlSeg"), () => $("tlSeg").querySelector("button").click());
 })();
@@ -385,14 +385,14 @@ function checklist(id, items) {
 }
 checklist("setup", [
   ["Step 1", "A laptop with Chrome, signed in to any Google account."],
-  ["Step 2", 'Open <a data-nb="1" target="_blank" rel="noopener">Notebook 1 in Colab</a>.'],
+  ["Step 2", 'Open <a data-nb="1" target="_blank" rel="noopener">the notebook in Colab</a>.'],
   ["Step 3", "Turn on the free GPU: <b>Runtime → Change runtime type → T4 GPU</b> → Save."],
-  ["Step 4", "Run the first cell (click ▶ beside it). It should say a GPU was found."],
+  ["Step 4", "Run the first cell, <b>Setup</b> (click ▶ beside it). It should say a GPU was found."],
 ]);
 checklist("ideas", [
-  ["Wider", "More filters in each layer: width 32 → 64."],
-  ["Deeper", "One more convolution layer: extra_layer=True."],
-  ["Longer", "More training rounds. Watch the test accuracy, not just training."],
-  ["Flip", "Show the network flipped copies of each photo while training, so it sees more variety. This is called <b>data augmentation</b>."],
-  ["Rate", "Try learning rate 0.0005 or 0.003 instead of 0.001."],
+  ["Network", 'Another pretrained network: <code>model_name = "mobilenet"</code> or <code>"efficientnet"</code>.'],
+  ["Unlock", "Let the last block of the network learn too: <code>unlock = True</code>."],
+  ["Flip", "Show mirrored copies of the photos while training, so it sees more variety. This is called <b>data augmentation</b>: <code>flip = True</code>."],
+  ["Longer", "More training rounds: <code>rounds = 20</code>. Watch the test score each round."],
+  ["Rate", "A smaller or bigger step: <code>lr = 0.0003</code> or <code>0.003</code>."],
 ]);
