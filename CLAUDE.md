@@ -15,3 +15,10 @@
   /api/leaderboard/deep-learning (lib/leaderboard.ts in the site repo).
 - The notebook is built by a script (make_nb.py, kept outside this repo); edit the notebook
   directly if that script isn't at hand. Test every code cell before pushing.
+- Home page (19 Nov 2026): the hero is a mini teachable machine (assets/tm.js: MediaPipe MobileNet embeddings + a
+  7-nearest-neighbour vote, webcam, loads on Start camera, Camera off button, off when the tab is hidden, falls back
+  to a Teachable Machine link). Session page 2 is a live Teachable Machine demo. Not tested by Claude with a real
+  webcam or the real model (both unreachable from the sandbox): test with a mock (see the session notes).
+- The 2-hour plan, with Teachable Machine and a 10-minute break after Lab 2: 0:00 intro + Teachable Machine + setup,
+  0:15 a neuron → Lab 1, 0:35 layers / loop / overfitting / convolution, 0:50 Lab 2, 1:05 break, 1:15 transfer learning,
+  CLIP, Practice 2 (show of hands), 1:20 Lab 3 + leaderboard, 1:45 Lab 4, winners, questions. No more additions.
