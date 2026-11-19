@@ -121,8 +121,16 @@
 .rps-moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 6px; }
 .rps-moves button { font-family: var(--mono); font-size: 0.95rem; padding: 9px 6px; display: flex; justify-content: center; align-items: center; gap: 8px; }
 .rps-moves kbd { font-family: var(--mono); font-size: 0.75rem; padding: 0 5px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 4px; color: var(--pencil); }
-.rps-result { font-family: var(--mono); font-size: 0.88rem; margin: 6px 0 10px; min-height: 1.4em; }
-.rps-guess { color: var(--pencil); }
+.rps-result { font-family: var(--mono); font-size: 0.86rem; margin: 6px 0 8px; min-height: 2.9em; }
+.rps-result p { margin: 0 0 2px; }
+.rps-result .rps-final { font-family: var(--head); font-size: 1.25rem; }
+.rps-result .rps-again { margin-top: 6px; }
+.rps-pred-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.rps-peek { font-size: 0.78rem; color: var(--pencil); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.rps-peek input { accent-color: var(--pen); }
+.rps-bars { min-height: 7.6em; }
+.rps-how { border-bottom: 1.5px dotted var(--pencil); cursor: help; }
+.rps-guess { color: var(--pencil); font-size: 0.8rem; }
 .rps-label { margin: 6px 0 4px; font-family: var(--mono); font-size: 0.82rem; color: var(--pencil); }
 .rps-bars { margin-bottom: 8px; }
 .rps-bars .nw-bar { grid-template-columns: 6.5em 1fr 3em; }

@@ -397,13 +397,16 @@ checklist("ideas", [
 ]);
 
 // ---------- Home: rock, paper, scissors against an online learner ----------
-// An order-2 Markov model of the player, updated after every round. It commits to its move
-// before the player's click, using only the moves played so far.
+// A 30-round match against an order-2 Markov model of the player, updated after every round.
+// It commits to its move before the player's click, using only the moves played so far.
+// Its prediction is shown after each round; "Show its prediction" reveals it beforehand
+// (then anyone can beat it: what an adversarial attack looks like).
 (function rps() {
   const box = $("homeRps"); if (!box) return;
+  const ROUNDS = 30;
   const MOVES = ["rock", "paper", "scissors"], BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };
   const NAME = { rock: "Rock", paper: "Paper", scissors: "Scissors" };
-  let history = [], hits = [], score = { you: 0, ai: 0, draw: 0 };
+  let history = [], hits = [], score = { you: 0, ai: 0, draw: 0 }, last = null, peek = false, peeked = false;
 
   // P(next | last two) with add-one smoothing, backing off to P(next | last one) and P(next)
   function predict() {
@@ -414,65 +417,95 @@ checklist("ideas", [
       if (n >= 1 && i >= 1 && history[i - 1] === history[n - 1]) c1[k]++;
       if (n >= 2 && i >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) c2[k]++;
     }
-    const seen2 = c2.reduce((a, b) => a + b) - 3, seen1 = c1.reduce((a, b) => a + b) - 3;
-    const c = seen2 >= 2 ? c2 : seen1 >= 2 ? c1 : c0;
-    const ctx = seen2 >= 2 ? `${history[n - 2]} → ${history[n - 1]}` : seen1 >= 2 ? history[n - 1] : "any move";
+    const seen2 = c2.reduce((x, y) => x + y) - 3, seen1 = c1.reduce((x, y) => x + y) - 3;
+    const [c, ctx] = seen2 >= 2 ? [c2, `last two: ${history[n - 2]} → ${history[n - 1]}`] : seen1 >= 2 ? [c1, `last: ${history[n - 1]}`] : [c0, ""];
     const t = c[0] + c[1] + c[2];
     return { p: c.map(v => v / t), ctx };
   }
   const choose = p => { const top = Math.max(...p); return top < 0.4 ? MOVES[Math.floor(Math.random() * 3)] : BEATS[MOVES[p.indexOf(top)]]; };
+  const pct = v => (v * 100).toFixed(0) + "%";
+  const label = pr => `P(your next move${pr.ctx ? " | " + pr.ctx : ""})`;
 
   box.innerHTML = `
     <div class="rps-moves" role="group" aria-label="Your move">${MOVES.map((m, i) => `<button type="button" data-m="${m}">${NAME[m]} <kbd>${i + 1}</kbd></button>`).join("")}</div>
-    <p class="rps-result" aria-live="polite">Your move. The model has already picked.</p>
-    <p class="rps-label">P(your next move | <span class="rps-ctx">any move</span>)</p>
-    <div class="nw-bars rps-bars"></div>
-    <div class="rps-stats">
-      <div><span>Rounds</span><b data-k="n">0</b></div>
-      <div><span>Prediction accuracy</span><b data-k="acc">—</b></div>
-      <div><span>Model win rate</span><b data-k="win">—</b></div>
+    <div class="rps-result" aria-live="polite"></div>
+    <div class="rps-pred">
+      <div class="rps-pred-head"><span class="rps-label"></span>
+        <label class="rps-peek"><input type="checkbox"> Show its prediction</label></div>
+      <div class="nw-bars rps-bars"></div>
     </div>
-    <svg class="rps-spark" viewBox="0 0 300 54" role="img" aria-label="Prediction accuracy over time, with the 33% chance line">
+    <div class="rps-stats">
+      <div><span>Round</span><b data-k="n">0 / ${ROUNDS}</b></div>
+      <div><span>Score (you · model)</span><b data-k="score">0 · 0</b></div>
+      <div><span>Prediction accuracy</span><b data-k="acc">—</b></div>
+    </div>
+    <svg class="rps-spark" viewBox="0 0 300 54" role="img" aria-label="Prediction accuracy over the match, with the 33% chance line">
       <line class="base" x1="0" x2="300" y1="36" y2="36"/><text x="298" y="33" text-anchor="end">chance 33%</text><path class="acc" d=""/>
     </svg>
-    <p class="rps-note">An order-2 Markov model, updated online after every round: it learns from your data, with no network yet.</p>`;
+    <p class="rps-note">An order-2 Markov model, updated after every round. <span class="rps-how" data-peek="It counts what you played after each pair of moves you've made. Those counts become probabilities for your next move (with a fallback to your last move, then to all your moves, until it has seen enough). It then plays whatever beats your most likely move. No neural network: in the session you'll train one.">How does it work? 🤔</span></p>`;
+  const buttons = [...box.querySelectorAll(".rps-moves button")];
   let pred = predict(), aiMove = choose(pred.p);
-  const pct = v => (v * 100).toFixed(0) + "%";
+
+  function bars(pr, mark) {
+    const top = Math.max(...pr.p), unique = pr.p.filter(v => v === top).length === 1;   // no winner on a tie
+    return MOVES.map((m, i) => `<div class="nw-bar${pr.p[i] === top && unique ? " top" : ""}"><span class="w">${m}${mark === m ? " ←" : ""}</span>
+      <span class="track"><span class="fill" style="width:${pr.p[i] * 100}%"></span></span><span class="pc">${pr.p[i].toFixed(2)}</span></div>`).join("");
+  }
   function draw() {
-    const top = Math.max(...pred.p), n = history.length;
-    box.querySelector(".rps-ctx").textContent = n ? `after ${pred.ctx}` : "any move";
-    box.querySelector(".rps-bars").innerHTML = MOVES.map((m, i) => `<div class="nw-bar${pred.p[i] === top && n ? " top" : ""}"><span class="w">${m}</span>
-      <span class="track"><span class="fill" style="width:${pred.p[i] * 100}%"></span></span><span class="pc">${pred.p[i].toFixed(2)}</span></div>`).join("");
-    const acc = hits.length ? hits.filter(Boolean).length / hits.length : null;
-    const played = score.you + score.ai + score.draw;
-    box.querySelector('[data-k="n"]').textContent = n;
-    box.querySelector('[data-k="acc"]').textContent = acc === null ? "—" : pct(acc);
-    box.querySelector('[data-k="win"]').textContent = played ? pct(score.ai / played) : "—";
-    // Running accuracy, one point per round
+    const n = history.length, done = n >= ROUNDS;
+    // Before you play: its prediction for this round, only if you asked to see it.
+    // After you play: what it predicted for the move you just made.
+    const lab = box.querySelector(".rps-label"), b = box.querySelector(".rps-bars");
+    if (peek && !done) { lab.textContent = label(pred) + " · this round"; b.innerHTML = bars(pred); }
+    else if (last) { lab.textContent = label(last.pr) + " · it predicted"; b.innerHTML = bars(last.pr, last.you); }
+    else { lab.textContent = "Its prediction shows after you play."; b.innerHTML = ""; }
+    const scored = hits.length;   // round 1 isn't scored: it had nothing to go on
+    box.querySelector('[data-k="n"]').textContent = `${n} / ${ROUNDS}`;
+    box.querySelector('[data-k="score"]').textContent = `${score.you} · ${score.ai}`;
+    box.querySelector('[data-k="acc"]').textContent = scored ? pct(hits.filter(Boolean).length / scored) : "—";
     let d = "", right = 0;
-    hits.forEach((h, i) => { right += h; const x = hits.length < 2 ? 0 : (i / (hits.length - 1)) * 300, y = 52 - (right / (i + 1)) * 48; d += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1); });
+    hits.forEach((h, i) => { right += h; const x = ROUNDS > 2 ? (i / (ROUNDS - 2)) * 300 : 0, y = 52 - (right / (i + 1)) * 48; d += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1); });
     box.querySelector(".rps-spark .acc").setAttribute("d", d);
+    buttons.forEach(btn => btn.disabled = done);
+  }
+  function result() {
+    const r = box.querySelector(".rps-result");
+    if (!last) { r.innerHTML = `<p>Your move. The model has already picked.</p>`; return; }
+    const verdict = last.res === "you" ? "You win" : last.res === "ai" ? "Model wins" : "Draw";
+    let html = `<p>You: ${NAME[last.you]} · Model: ${NAME[last.it]} · <b>${verdict}</b></p>` +
+      (last.scored ? `<p class="rps-guess">It predicted ${last.guess} ${last.guess === last.you ? "✓" : "✗"}, so it played ${NAME[last.it]}.</p>` : `<p class="rps-guess">Round 1: it had nothing to go on, so it played at random.</p>`);
+    if (history.length >= ROUNDS) {
+      const { you, ai, draw } = score;
+      html = `<p class="rps-final"><b>${you > ai ? `You beat the model ${you}–${ai}` : ai > you ? `The model wins ${ai}–${you}` : `A tie, ${you}–${ai}`}</b> (${draw} draws).</p>
+        <p class="rps-guess">${peeked ? "You could see its prediction, so you knew its move. Knowing what a model will do lets you beat it on purpose: that's an adversarial attack." : ai > you ? "It learned your habits. Try again, and be less predictable." : "Hard to read! Its accuracy shows how much it learned."}</p>
+        <button type="button" class="primary rps-again">Play again</button>`;
+    }
+    r.innerHTML = html;
+    const again = r.querySelector(".rps-again"); if (again) again.onclick = restart;
   }
   function play(you) {
-    const it = aiMove, guessed = MOVES[pred.p.indexOf(Math.max(...pred.p))];
-    hits.push(history.length ? +(guessed === you) : 0);
-    const result = you === it ? "draw" : BEATS[it] === you ? "you" : "ai";
-    score[result]++;
-    box.querySelector(".rps-result").innerHTML = `You: ${NAME[you]} · Model: ${NAME[it]} · <b>${result === "you" ? "You win" : result === "ai" ? "Model wins" : "Draw"}</b>` +
-      (history.length ? ` <span class="rps-guess">(it predicted ${guessed})</span>` : "");
+    if (history.length >= ROUNDS) return;
+    const it = aiMove, scored = history.length > 0, guess = MOVES[pred.p.indexOf(Math.max(...pred.p))];
+    if (scored) hits.push(+(guess === you));
+    const res = you === it ? "draw" : BEATS[it] === you ? "you" : "ai";
+    score[res]++;
+    if (peek) peeked = true;
+    last = { you, it, res, guess, scored, pr: pred };
     history.push(you);
     pred = predict(); aiMove = choose(pred.p);   // committed before your next click
-    draw();
+    result(); draw();
   }
-  box.querySelectorAll(".rps-moves button").forEach(b => b.onclick = () => play(b.dataset.m));
+  function restart() {
+    history = []; hits = []; score = { you: 0, ai: 0, draw: 0 }; last = null; peeked = peek;
+    pred = predict(); aiMove = choose(pred.p);
+    result(); draw();
+  }
+  buttons.forEach(b => b.onclick = () => play(b.dataset.m));
+  box.querySelector(".rps-peek input").onchange = e => { peek = e.target.checked; draw(); };
   document.addEventListener("keydown", e => {
     if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
     const i = ["1", "2", "3"].indexOf(e.key); if (i >= 0) play(MOVES[i]);
   });
-  draw();
-  reset(box, () => {
-    history = []; hits = []; score = { you: 0, ai: 0, draw: 0 }; pred = predict(); aiMove = choose(pred.p);
-    box.querySelector(".rps-result").textContent = "Your move. The model has already picked.";
-    draw();
-  });
+  result(); draw();
+  reset(box, () => { box.querySelector(".rps-peek input").checked = false; peek = false; restart(); });
 })();
