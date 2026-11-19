@@ -42,7 +42,6 @@
 .gd-btns { margin-top: 6px; }
 .gd-math { font-family: var(--mono); font-size: 0.86rem; line-height: 1.6; margin-top: 8px; min-height: 5.6em; }
 .gd-math .verdict { font-family: var(--body, inherit); }
-#homeGd .gd-math { min-height: 1.6em; font-family: var(--head); font-size: 1.15rem; }
 
 /* Remember block and practice */
 .remember { background: var(--note-yellow); color: var(--ink); padding: 10px 16px; border-radius: 3px; margin: 8px 0 14px; }
@@ -101,7 +100,6 @@
 .nb-time { margin-left: 12px; color: var(--pencil); font-size: 0.95rem; }
 
 /* Home: a smaller chart */
-#homeGd .chart { max-height: 210px; }
 @media (min-width: 521px) { #wParts { grid-template-columns: repeat(3, 1fr); max-width: 980px; } }
 
 @media (max-width: 520px) {
@@ -118,3 +116,15 @@
   .fit.with-loss .worked { margin-top: 0; }
 }
 .chart .dot.test { fill: var(--redpen); }
+
+/* Home: rock, paper, scissors */
+.rps-moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0 6px; }
+.rps-moves button { display: grid; justify-items: center; gap: 2px; padding: 10px 4px; font-family: var(--head); font-size: 1.05rem; }
+.rps-moves button span { font-size: 2.2rem; line-height: 1.1; }
+.rps-moves button:active { transform: translateY(1px); }
+.rps-result { font-family: var(--head); font-size: 1.3rem; margin: 6px 0; min-height: 1.6em; }
+.rps-score { display: flex; gap: 18px; font-family: var(--head); font-size: 1.1rem; color: var(--pencil); }
+.rps-score b { color: var(--ink); font-family: var(--mono); }
+.rps-label { margin: 12px 0 4px; font-size: 0.9rem; color: var(--pencil); }
+.rps-bars .nw-bar { grid-template-columns: 7.5em 1fr 3em; }
+.rps-note { margin: 8px 0 0; font-family: var(--hand); color: var(--pencil); min-height: 1.4em; }

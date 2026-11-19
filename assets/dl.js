@@ -162,7 +162,6 @@ function gdWidget(id, mini) {
   reset(box, () => { const s = $(id + "-rate"); if (s) s.querySelectorAll("button")[1].click(); else restart(); });
 }
 gdWidget("gd", false);
-gdWidget("homeGd", true);
 
 // ---------- Practice: type the answer ----------
 function practice(id, problems) {
@@ -396,3 +395,68 @@ checklist("ideas", [
   ["Longer", "More training rounds: <code>rounds = 20</code>. Watch the test score each round."],
   ["Rate", "A smaller or bigger step: <code>lr = 0.0003</code> or <code>0.003</code>."],
 ]);
+
+// ---------- Home: rock, paper, scissors against a tiny model that learns your habits ----------
+// It picks its move before you click, from what you played before (no peeking at your click).
+(function rps() {
+  const box = $("homeRps"); if (!box) return;
+  const MOVES = ["rock", "paper", "scissors"], ICON = { rock: "✊", paper: "✋", scissors: "✌️" };
+  const BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };   // what beats each move
+  let history = [], score = { you: 0, ai: 0, draw: 0 };
+
+  // Its guess for your next move: what you played after your last two moves, then after your last one,
+  // then overall. Each pattern it has seen counts for more the more often it happened.
+  function guess() {
+    const count = { rock: 1, paper: 1, scissors: 1 };   // start even
+    const n = history.length;
+    for (let i = 0; i < n; i++) {
+      const next = history[i];
+      count[next] += 0.2;                                                   // overall
+      if (n >= 1 && i >= 1 && history[i - 1] === history[n - 1]) count[next] += 1;   // after the same move
+      if (n >= 2 && i >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) count[next] += 2;   // after the same two
+    }
+    const total = count.rock + count.paper + count.scissors;
+    return MOVES.map(m => count[m] / total);
+  }
+  function pick(chances) {
+    const top = Math.max(...chances);
+    if (top < 0.4) return MOVES[Math.floor(Math.random() * 3)];          // not sure yet: play anything
+    return BEATS[MOVES[chances.indexOf(top)]];                            // sure: play what beats your likely move
+  }
+
+  box.innerHTML = `
+    <div class="rps-moves" role="group" aria-label="Your move">${MOVES.map(m => `<button type="button" data-m="${m}" aria-label="${m}"><span>${ICON[m]}</span>${m}</button>`).join("")}</div>
+    <p class="rps-result" aria-live="polite">Pick a move.</p>
+    <div class="rps-score"><span>You <b data-s="you">0</b></span><span>It <b data-s="ai">0</b></span><span>Draws <b data-s="draw">0</b></span></div>
+    <p class="rps-label">What it thinks you'll play next</p>
+    <div class="nw-bars rps-bars"></div>
+    <p class="rps-note"></p>`;
+  let chances = guess(), aiMove = pick(chances);
+  function drawBars() {
+    const top = Math.max(...chances);
+    box.querySelector(".rps-bars").innerHTML = MOVES.map((m, i) => `<div class="nw-bar${chances[i] === top && history.length ? " top" : ""}"><span class="w">${ICON[m]} ${m}</span>
+      <span class="track"><span class="fill" style="width:${chances[i] * 100}%"></span></span><span class="pc">${Math.round(chances[i] * 100)}%</span></div>`).join("");
+    const n = history.length;
+    box.querySelector(".rps-note").innerHTML = n < 5 ? "It knows nothing about you yet." :
+      n < 15 ? `Round ${n}: it's starting to spot your habits.` :
+      score.ai > score.you ? `Round ${n}: it's winning, because people are more predictable than they think.` :
+      `Round ${n}: you're hard to read! Try playing the same pattern and watch it catch on.`;
+  }
+  box.querySelectorAll(".rps-moves button").forEach(b => b.onclick = () => {
+    const you = b.dataset.m, it = aiMove;
+    const result = you === it ? "draw" : BEATS[it] === you ? "you" : "ai";
+    score[result]++;
+    box.querySelector(".rps-result").innerHTML = `You ${ICON[you]} · It ${ICON[it]} · <b>${result === "you" ? "You win!" : result === "ai" ? "It wins." : "Draw."}</b>`;
+    box.querySelectorAll("[data-s]").forEach(el => el.textContent = score[el.dataset.s]);
+    history.push(you);
+    chances = guess(); aiMove = pick(chances);   // its next move is chosen now, before your next click
+    drawBars();
+  });
+  drawBars();
+  reset(box, () => {
+    history = []; score = { you: 0, ai: 0, draw: 0 }; chances = guess(); aiMove = pick(chances);
+    box.querySelector(".rps-result").textContent = "Pick a move.";
+    box.querySelectorAll("[data-s]").forEach(el => el.textContent = 0);
+    drawBars();
+  });
+})();
