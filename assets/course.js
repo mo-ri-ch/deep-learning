@@ -44,12 +44,12 @@ window.COURSE = {
   // Read by webinar.js on the home page
   webinar: {
     parts: [
-      { title: "Deep learning today", sum: "What's new, and the plan.", href: "lessons/session.html#1" },
-      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Then Lab 1 in the notebook.", href: "lessons/session.html#3" },
-      { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Then Lab 2: rock, paper, scissors.", href: "lessons/session.html#8" },
-      { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#14" },
-      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Lab 3.", href: "lessons/session.html#17" },
-      { title: "Play against it", sum: "An app that reads your hand from the webcam. Lab 4.", href: "lessons/session.html#18" },
+      { title: "Deep learning today", sum: "What's new, then train a model in one minute with Teachable Machine.", href: "lessons/session.html#1" },
+      { title: "How a network learns", sum: "A neuron, the loss and walking downhill. Then Lab 1 in the notebook.", href: "lessons/session.html#4" },
+      { title: "Networks and images", sum: "Layers, the training loop, overfitting and convolution. Then Lab 2: rock, paper, scissors.", href: "lessons/session.html#9" },
+      { title: "Borrow a trained network", sum: "Transfer learning and foundation models.", href: "lessons/session.html#15" },
+      { title: "The leaderboard", sum: "Teams fine-tune with just 60 photos, live on the board. Lab 3.", href: "lessons/session.html#18" },
+      { title: "Play against it", sum: "An app that reads your hand from the webcam. Lab 4.", href: "lessons/session.html#19" },
     ],
   },
 };

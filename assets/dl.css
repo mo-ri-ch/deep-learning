@@ -155,3 +155,7 @@
 .hero .need .yes { color: var(--good); font-weight: 700; }
 .hero .need .no { color: var(--redpen); font-weight: 700; }
 @media (max-width: 520px) { .hero .need .cols { grid-template-columns: 1fr; } }
+
+/* Home: what you'll build */
+.tm-card { max-width: 760px; margin: 0 0 40px; }
+.tm-card .say { font-size: 1.15rem; }
