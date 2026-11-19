@@ -28,52 +28,52 @@
       <div>
         <span class="w-stamp">Hands-on</span>
         <h1>Deep learning, <span class="swash">hands-on</span>.</h1>
-        <p class="say">Build a neural network from one neuron up, then teach one to play rock, paper, scissors, <b>in your browser, for free.</b></p>
+        <p class="say">Build a neural network from one neuron up, then train one to recognise rock, paper and scissors from your hand, and play against it. <b>In your browser, for free.</b></p>
         <div class="actions">
           <a class="btn primary" href="lessons/session.html">Start</a>
           <a class="btn" id="colabBtn" target="_blank" rel="noopener">Open the notebook in Colab</a>
         </div>
-
-        <div class="need">
-          <div class="cols">
-            <div>
-              <h3>You need</h3>
-              <ul>
-                <li><span class="yes">✓</span> A laptop with Chrome and a Google account</li>
-                <li><span class="yes">✓</span> Basic Python: variables, lists, functions (helpful; you can also just run the cells)</li>
-                <li><span class="yes">✓</span> School maths: add, multiply, averages</li>
-                <li><span class="yes">✓</span> A webcam for Lab 4, or a photo to upload</li>
-              </ul>
-            </div>
-            <div>
-              <h3>You don't need</h3>
-              <ul>
-                <li><span class="no">✗</span> Machine learning experience</li>
-                <li><span class="no">✗</span> Calculus or linear algebra</li>
-                <li><span class="no">✗</span> A GPU of your own</li>
-                <li><span class="no">✗</span> To install anything</li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="activity">
-        <div class="do">Rock, paper, scissors against a model that learns from your moves, live. Can you stay unpredictable?</div>
-        <div id="homeRps"></div>
+        <div class="do">Train a model on your own hand, right here, in about a minute.</div>
+        <div id="homeTm"></div>
       </div>
     </section>
 
     <h2 class="w-head">What you’ll build</h2>
     <div class="tm-card">
-      <p class="say">Have you tried <b>Teachable Machine</b>? Show it rock, paper and scissors on your webcam, press Train, and a minute later it recognises your hand.</p>
-      <p class="say">Today you’ll build that kind of model yourself, <b>in code</b>, and understand every step: how a network learns, how it sees, and <mark>transfer learning</mark>, the trick that lets it learn from a few photos. Then you’ll play rock, paper, scissors against it.</p>
-      <a class="btn" href="https://teachablemachine.withgoogle.com/train/image" target="_blank" rel="noopener">Try Teachable Machine ↗</a>
+      <p class="say">The trainer above learns your hand in seconds because it borrows a network already trained on millions of photos. That trick is called <mark>transfer learning</mark>.</p>
+      <p class="say">Today you’ll build that kind of model yourself, <b>in code</b>, and understand every step: how a network learns, how it sees, and how to reuse what it already knows. Then you’ll play rock, paper, scissors against it.</p>
     </div>
 
     <h2 class="w-head">What we’ll cover</h2>
     <p class="w-intro">Short ideas here, the coding in Colab.</p>
     <ul class="w-notes" id="wParts"></ul>
+
+    <h2 class="w-head">What you need</h2>
+            <div class="need need-note">
+      <div class="cols">
+        <div>
+          <h3>You need</h3>
+          <ul>
+            <li><span class="yes">✓</span> A laptop with Chrome and a Google account</li>
+            <li><span class="yes">✓</span> Basic Python: variables, lists, functions (helpful; you can also just run the cells)</li>
+            <li><span class="yes">✓</span> School maths: add, multiply, averages</li>
+            <li><span class="yes">✓</span> A webcam for Lab 4, or a photo to upload</li>
+          </ul>
+        </div>
+        <div>
+          <h3>You don't need</h3>
+          <ul>
+            <li><span class="no">✗</span> Machine learning experience</li>
+            <li><span class="no">✗</span> Calculus or linear algebra</li>
+            <li><span class="no">✗</span> A GPU of your own</li>
+            <li><span class="no">✗</span> To install anything</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
   </main>
   <footer class="site">Your notes are saved in this browser only.</footer>
@@ -84,5 +84,6 @@
 <script src="https://mo-ri-ch.github.io/study-notebook-design/v1/pen.js"></script>
 <script src="https://mo-ri-ch.github.io/study-notebook-design/v1/webinar.js"></script>
 <script src="assets/dl.js"></script>
+<script type="module" src="assets/tm.js"></script>
 </body>
 </html>

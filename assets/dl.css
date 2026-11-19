@@ -117,45 +117,45 @@
 }
 .chart .dot.test { fill: var(--redpen); }
 
-/* Home: rock, paper, scissors against an online learner */
-.rps-moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 6px; }
-.rps-moves button { font-family: var(--mono); font-size: 0.95rem; padding: 9px 6px; display: flex; justify-content: center; align-items: center; gap: 8px; }
-.rps-moves kbd { font-family: var(--mono); font-size: 0.75rem; padding: 0 5px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 4px; color: var(--pencil); }
-.rps-result { font-family: var(--mono); font-size: 0.86rem; margin: 6px 0 8px; min-height: 2.9em; }
-.rps-result p { margin: 0 0 2px; }
-.rps-result .rps-final { font-family: var(--head); font-size: 1.25rem; }
-.rps-result .rps-again { margin-top: 6px; }
-.rps-pred-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.rps-peek { font-size: 0.78rem; color: var(--pencil); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
-.rps-peek input { accent-color: var(--pen); }
-.rps-bars { min-height: 7.6em; }
-.rps-how { border-bottom: 1.5px dotted var(--pencil); cursor: help; }
-.rps-guess { color: var(--pencil); font-size: 0.8rem; }
-.rps-label { margin: 6px 0 4px; font-family: var(--mono); font-size: 0.82rem; color: var(--pencil); }
-.rps-bars { margin-bottom: 8px; }
-.rps-bars .nw-bar { grid-template-columns: 6.5em 1fr 3em; }
-.rps-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0; }
-.rps-stats div { display: grid; gap: 2px; }
-.rps-stats span { font-size: 0.75rem; color: var(--pencil); }
-.rps-stats b { font-family: var(--mono); font-size: 1.15rem; }
-.rps-spark { width: 100%; height: 54px; display: block; margin-top: 4px; }
-.rps-spark .base { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-dasharray: 4 4; }
-.rps-spark text { font-family: var(--mono); font-size: 9px; fill: var(--pencil); }
-.rps-spark .acc { fill: none; stroke: var(--good); stroke-width: 2; }
-.rps-note { margin: 6px 0 0; font-size: 0.8rem; color: var(--pencil); }
-
 /* Home: "What you need" as a sticky note (the same look as the course home pages) */
-.hero .need { position: relative; margin-top: 28px; padding: 22px 22px 14px; background: var(--note-yellow); color: var(--ink);
+.need-note { position: relative; margin-top: 28px; padding: 22px 22px 14px; background: var(--note-yellow); color: var(--ink);
   border-radius: 2px 2px 6px 2px; transform: rotate(-0.6deg); box-shadow: 0 14px 22px -14px rgba(20,24,50,.45); }
-.hero .need::before { content: ""; position: absolute; top: -12px; left: 40px; width: 90px; height: 24px; background: var(--tape); transform: rotate(-3deg); }
-.hero .need .cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
-.hero .need h3 { font-size: 1.35rem; margin: 0 0 8px; }
-.hero .need ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 0.95rem; }
-.hero .need li { display: grid; grid-template-columns: 1.4em 1fr; }
-.hero .need .yes { color: var(--good); font-weight: 700; }
-.hero .need .no { color: var(--redpen); font-weight: 700; }
-@media (max-width: 520px) { .hero .need .cols { grid-template-columns: 1fr; } }
+.need-note::before { content: ""; position: absolute; top: -12px; left: 40px; width: 90px; height: 24px; background: var(--tape); transform: rotate(-3deg); }
+.need-note .cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+.need-note h3 { font-size: 1.35rem; margin: 0 0 8px; }
+.need-note ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 0.95rem; }
+.need-note li { display: grid; grid-template-columns: 1.4em 1fr; }
+.need-note .yes { color: var(--good); font-weight: 700; }
+.need-note .no { color: var(--redpen); font-weight: 700; }
+@media (max-width: 520px) { .need-note .cols { grid-template-columns: 1fr; } }
 
 /* Home: what you'll build */
 .tm-card { max-width: 760px; margin: 0 0 40px; }
 .tm-card .say { font-size: 1.15rem; }
+
+/* Home: the mini teachable machine */
+.tm-stage { position: relative; aspect-ratio: 4 / 3; background: var(--code-bg); border-radius: 8px; overflow: hidden; margin: 8px 0 10px; }
+.tm-video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
+.tm-cover { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 8px; padding: 16px; text-align: center; color: var(--code-ink); background: var(--code-bg); }
+.tm-cover[hidden] { display: none; }
+.tm-cover p { margin: 0; max-width: 28em; }
+.tm-small { font-size: 0.85rem; opacity: 0.8; }
+.tm-guess { position: absolute; left: 10px; bottom: 10px; padding: 4px 12px; border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--head); font-size: 1.3rem; }
+.tm-guess:empty { display: none; }
+.tm-step { margin: 0 0 6px; font-size: 0.9rem; color: var(--pencil); }
+.tm-classes { display: grid; gap: 6px; }
+.tm-hold { display: grid; grid-template-columns: 7.5em 6.5em 1fr 3em; align-items: center; gap: 10px; text-align: left; padding: 7px 10px; user-select: none; touch-action: none; }
+.tm-hold .tm-name { font-family: var(--head); font-size: 1.1rem; }
+.tm-hold kbd { font-family: var(--mono); font-size: 0.7rem; padding: 0 4px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 4px; color: var(--pencil); }
+.tm-hold .tm-count { font-size: 0.8rem; color: var(--pencil); }
+.tm-hold .tm-bar { height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 8%, transparent); overflow: hidden; }
+.tm-hold .tm-fill { display: block; height: 100%; width: 0; background: var(--pen); transition: width .15s; }
+.tm-hold.top .tm-fill { background: var(--good); }
+.tm-hold .tm-pc { font-family: var(--mono); font-size: 0.85rem; text-align: right; color: var(--pencil); }
+.tm-hold.on { background: var(--hl-yellow); color: var(--on-hl); }
+.tm-hold:disabled { opacity: 0.55; }
+.tm-status { min-height: 1.4em; margin: 8px 0 0; font-size: 0.9rem; }
+.tm-how { margin: 4px 0 0; font-size: 0.85rem; color: var(--pencil); }
+.tm-how .peekword { border-bottom: 1.5px dotted var(--pencil); cursor: help; }
+.need-note { max-width: 760px; margin-bottom: 40px; }
+@media (max-width: 520px) { .tm-hold { grid-template-columns: 6.5em 1fr 2.8em; } .tm-hold .tm-count { display: none; } }
