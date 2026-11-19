@@ -418,13 +418,13 @@ checklist("ideas", [
       if (n >= 2 && i >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) c2[k]++;
     }
     const seen2 = c2.reduce((x, y) => x + y) - 3, seen1 = c1.reduce((x, y) => x + y) - 3;
-    const [c, ctx] = seen2 >= 2 ? [c2, `last two: ${history[n - 2]} → ${history[n - 1]}`] : seen1 >= 2 ? [c1, `last: ${history[n - 1]}`] : [c0, ""];
+    const [c, ctx] = seen2 >= 2 ? [c2, `before it: ${history[n - 2]} → ${history[n - 1]}`] : seen1 >= 2 ? [c1, `before it: ${history[n - 1]}`] : [c0, ""];
     const t = c[0] + c[1] + c[2];
     return { p: c.map(v => v / t), ctx };
   }
   const choose = p => { const top = Math.max(...p); return top < 0.4 ? MOVES[Math.floor(Math.random() * 3)] : BEATS[MOVES[p.indexOf(top)]]; };
   const pct = v => (v * 100).toFixed(0) + "%";
-  const label = pr => `P(your next move${pr.ctx ? " | " + pr.ctx : ""})`;
+  const label = pr => `P(your move${pr.ctx ? " | " + pr.ctx : ""})`;
 
   box.innerHTML = `
     <div class="rps-moves" role="group" aria-label="Your move">${MOVES.map((m, i) => `<button type="button" data-m="${m}">${NAME[m]} <kbd>${i + 1}</kbd></button>`).join("")}</div>
@@ -456,8 +456,8 @@ checklist("ideas", [
     // Before you play: its prediction for this round, only if you asked to see it.
     // After you play: what it predicted for the move you just made.
     const lab = box.querySelector(".rps-label"), b = box.querySelector(".rps-bars");
-    if (peek && !done) { lab.textContent = label(pred) + " · this round"; b.innerHTML = bars(pred); }
-    else if (last) { lab.textContent = label(last.pr) + " · it predicted"; b.innerHTML = bars(last.pr, last.you); }
+    if (peek && !done) { lab.textContent = `Round ${n + 1} · its prediction now: ${label(pred)}`; b.innerHTML = bars(pred); }
+    else if (last) { lab.textContent = `Round ${n} · its prediction: ${label(last.pr)}`; b.innerHTML = bars(last.pr, last.you); }
     else { lab.textContent = "Its prediction shows after you play."; b.innerHTML = ""; }
     const scored = hits.length;   // round 1 isn't scored: it had nothing to go on
     box.querySelector('[data-k="n"]').textContent = `${n} / ${ROUNDS}`;
