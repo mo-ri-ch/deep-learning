@@ -396,67 +396,83 @@ checklist("ideas", [
   ["Rate", "A smaller or bigger step: <code>lr = 0.0003</code> or <code>0.003</code>."],
 ]);
 
-// ---------- Home: rock, paper, scissors against a tiny model that learns your habits ----------
-// It picks its move before you click, from what you played before (no peeking at your click).
+// ---------- Home: rock, paper, scissors against an online learner ----------
+// An order-2 Markov model of the player, updated after every round. It commits to its move
+// before the player's click, using only the moves played so far.
 (function rps() {
   const box = $("homeRps"); if (!box) return;
-  const MOVES = ["rock", "paper", "scissors"], ICON = { rock: "✊", paper: "✋", scissors: "✌️" };
-  const BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };   // what beats each move
-  let history = [], score = { you: 0, ai: 0, draw: 0 };
+  const MOVES = ["rock", "paper", "scissors"], BEATS = { rock: "paper", paper: "scissors", scissors: "rock" };
+  const NAME = { rock: "Rock", paper: "Paper", scissors: "Scissors" };
+  let history = [], hits = [], score = { you: 0, ai: 0, draw: 0 };
 
-  // Its guess for your next move: what you played after your last two moves, then after your last one,
-  // then overall. Each pattern it has seen counts for more the more often it happened.
-  function guess() {
-    const count = { rock: 1, paper: 1, scissors: 1 };   // start even
-    const n = history.length;
+  // P(next | last two) with add-one smoothing, backing off to P(next | last one) and P(next)
+  function predict() {
+    const n = history.length, c2 = [1, 1, 1], c1 = [1, 1, 1], c0 = [1, 1, 1];
     for (let i = 0; i < n; i++) {
-      const next = history[i];
-      count[next] += 0.2;                                                   // overall
-      if (n >= 1 && i >= 1 && history[i - 1] === history[n - 1]) count[next] += 1;   // after the same move
-      if (n >= 2 && i >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) count[next] += 2;   // after the same two
+      const k = MOVES.indexOf(history[i]);
+      c0[k]++;
+      if (n >= 1 && i >= 1 && history[i - 1] === history[n - 1]) c1[k]++;
+      if (n >= 2 && i >= 2 && history[i - 2] === history[n - 2] && history[i - 1] === history[n - 1]) c2[k]++;
     }
-    const total = count.rock + count.paper + count.scissors;
-    return MOVES.map(m => count[m] / total);
+    const seen2 = c2.reduce((a, b) => a + b) - 3, seen1 = c1.reduce((a, b) => a + b) - 3;
+    const c = seen2 >= 2 ? c2 : seen1 >= 2 ? c1 : c0;
+    const ctx = seen2 >= 2 ? `${history[n - 2]} → ${history[n - 1]}` : seen1 >= 2 ? history[n - 1] : "any move";
+    const t = c[0] + c[1] + c[2];
+    return { p: c.map(v => v / t), ctx };
   }
-  function pick(chances) {
-    const top = Math.max(...chances);
-    if (top < 0.4) return MOVES[Math.floor(Math.random() * 3)];          // not sure yet: play anything
-    return BEATS[MOVES[chances.indexOf(top)]];                            // sure: play what beats your likely move
-  }
+  const choose = p => { const top = Math.max(...p); return top < 0.4 ? MOVES[Math.floor(Math.random() * 3)] : BEATS[MOVES[p.indexOf(top)]]; };
 
   box.innerHTML = `
-    <div class="rps-moves" role="group" aria-label="Your move">${MOVES.map(m => `<button type="button" data-m="${m}" aria-label="${m}"><span>${ICON[m]}</span>${m}</button>`).join("")}</div>
-    <p class="rps-result" aria-live="polite">Pick a move.</p>
-    <div class="rps-score"><span>You <b data-s="you">0</b></span><span>It <b data-s="ai">0</b></span><span>Draws <b data-s="draw">0</b></span></div>
-    <p class="rps-label">What it thinks you'll play next</p>
+    <div class="rps-moves" role="group" aria-label="Your move">${MOVES.map((m, i) => `<button type="button" data-m="${m}">${NAME[m]} <kbd>${i + 1}</kbd></button>`).join("")}</div>
+    <p class="rps-result" aria-live="polite">Your move. The model has already picked.</p>
+    <p class="rps-label">P(your next move | <span class="rps-ctx">any move</span>)</p>
     <div class="nw-bars rps-bars"></div>
-    <p class="rps-note"></p>`;
-  let chances = guess(), aiMove = pick(chances);
-  function drawBars() {
-    const top = Math.max(...chances);
-    box.querySelector(".rps-bars").innerHTML = MOVES.map((m, i) => `<div class="nw-bar${chances[i] === top && history.length ? " top" : ""}"><span class="w">${ICON[m]} ${m}</span>
-      <span class="track"><span class="fill" style="width:${chances[i] * 100}%"></span></span><span class="pc">${Math.round(chances[i] * 100)}%</span></div>`).join("");
-    const n = history.length;
-    box.querySelector(".rps-note").innerHTML = n < 5 ? "It knows nothing about you yet." :
-      n < 15 ? `Round ${n}: it's starting to spot your habits.` :
-      score.ai > score.you ? `Round ${n}: it's winning, because people are more predictable than they think.` :
-      `Round ${n}: you're hard to read! Try playing the same pattern and watch it catch on.`;
+    <div class="rps-stats">
+      <div><span>Rounds</span><b data-k="n">0</b></div>
+      <div><span>Prediction accuracy</span><b data-k="acc">—</b></div>
+      <div><span>Model win rate</span><b data-k="win">—</b></div>
+    </div>
+    <svg class="rps-spark" viewBox="0 0 300 54" role="img" aria-label="Prediction accuracy over time, with the 33% chance line">
+      <line class="base" x1="0" x2="300" y1="36" y2="36"/><text x="298" y="33" text-anchor="end">chance 33%</text><path class="acc" d=""/>
+    </svg>
+    <p class="rps-note">An order-2 Markov model, updated online after every round: it learns from your data, with no network yet.</p>`;
+  let pred = predict(), aiMove = choose(pred.p);
+  const pct = v => (v * 100).toFixed(0) + "%";
+  function draw() {
+    const top = Math.max(...pred.p), n = history.length;
+    box.querySelector(".rps-ctx").textContent = n ? `after ${pred.ctx}` : "any move";
+    box.querySelector(".rps-bars").innerHTML = MOVES.map((m, i) => `<div class="nw-bar${pred.p[i] === top && n ? " top" : ""}"><span class="w">${m}</span>
+      <span class="track"><span class="fill" style="width:${pred.p[i] * 100}%"></span></span><span class="pc">${pred.p[i].toFixed(2)}</span></div>`).join("");
+    const acc = hits.length ? hits.filter(Boolean).length / hits.length : null;
+    const played = score.you + score.ai + score.draw;
+    box.querySelector('[data-k="n"]').textContent = n;
+    box.querySelector('[data-k="acc"]').textContent = acc === null ? "—" : pct(acc);
+    box.querySelector('[data-k="win"]').textContent = played ? pct(score.ai / played) : "—";
+    // Running accuracy, one point per round
+    let d = "", right = 0;
+    hits.forEach((h, i) => { right += h; const x = hits.length < 2 ? 0 : (i / (hits.length - 1)) * 300, y = 52 - (right / (i + 1)) * 48; d += (i ? "L" : "M") + x.toFixed(1) + "," + y.toFixed(1); });
+    box.querySelector(".rps-spark .acc").setAttribute("d", d);
   }
-  box.querySelectorAll(".rps-moves button").forEach(b => b.onclick = () => {
-    const you = b.dataset.m, it = aiMove;
+  function play(you) {
+    const it = aiMove, guessed = MOVES[pred.p.indexOf(Math.max(...pred.p))];
+    hits.push(history.length ? +(guessed === you) : 0);
     const result = you === it ? "draw" : BEATS[it] === you ? "you" : "ai";
     score[result]++;
-    box.querySelector(".rps-result").innerHTML = `You ${ICON[you]} · It ${ICON[it]} · <b>${result === "you" ? "You win!" : result === "ai" ? "It wins." : "Draw."}</b>`;
-    box.querySelectorAll("[data-s]").forEach(el => el.textContent = score[el.dataset.s]);
+    box.querySelector(".rps-result").innerHTML = `You: ${NAME[you]} · Model: ${NAME[it]} · <b>${result === "you" ? "You win" : result === "ai" ? "Model wins" : "Draw"}</b>` +
+      (history.length ? ` <span class="rps-guess">(it predicted ${guessed})</span>` : "");
     history.push(you);
-    chances = guess(); aiMove = pick(chances);   // its next move is chosen now, before your next click
-    drawBars();
+    pred = predict(); aiMove = choose(pred.p);   // committed before your next click
+    draw();
+  }
+  box.querySelectorAll(".rps-moves button").forEach(b => b.onclick = () => play(b.dataset.m));
+  document.addEventListener("keydown", e => {
+    if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+    const i = ["1", "2", "3"].indexOf(e.key); if (i >= 0) play(MOVES[i]);
   });
-  drawBars();
+  draw();
   reset(box, () => {
-    history = []; score = { you: 0, ai: 0, draw: 0 }; chances = guess(); aiMove = pick(chances);
-    box.querySelector(".rps-result").textContent = "Pick a move.";
-    box.querySelectorAll("[data-s]").forEach(el => el.textContent = 0);
-    drawBars();
+    history = []; hits = []; score = { you: 0, ai: 0, draw: 0 }; pred = predict(); aiMove = choose(pred.p);
+    box.querySelector(".rps-result").textContent = "Your move. The model has already picked.";
+    draw();
   });
 })();

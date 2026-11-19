@@ -117,14 +117,21 @@
 }
 .chart .dot.test { fill: var(--redpen); }
 
-/* Home: rock, paper, scissors */
-.rps-moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0 6px; }
-.rps-moves button { display: grid; justify-items: center; gap: 2px; padding: 10px 4px; font-family: var(--head); font-size: 1.05rem; }
-.rps-moves button span { font-size: 2.2rem; line-height: 1.1; }
-.rps-moves button:active { transform: translateY(1px); }
-.rps-result { font-family: var(--head); font-size: 1.3rem; margin: 6px 0; min-height: 1.6em; }
-.rps-score { display: flex; gap: 18px; font-family: var(--head); font-size: 1.1rem; color: var(--pencil); }
-.rps-score b { color: var(--ink); font-family: var(--mono); }
-.rps-label { margin: 12px 0 4px; font-size: 0.9rem; color: var(--pencil); }
-.rps-bars .nw-bar { grid-template-columns: 7.5em 1fr 3em; }
-.rps-note { margin: 8px 0 0; font-family: var(--hand); color: var(--pencil); min-height: 1.4em; }
+/* Home: rock, paper, scissors against an online learner */
+.rps-moves { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 6px; }
+.rps-moves button { font-family: var(--mono); font-size: 0.95rem; padding: 9px 6px; display: flex; justify-content: center; align-items: center; gap: 8px; }
+.rps-moves kbd { font-family: var(--mono); font-size: 0.75rem; padding: 0 5px; border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent); border-radius: 4px; color: var(--pencil); }
+.rps-result { font-family: var(--mono); font-size: 0.88rem; margin: 6px 0 10px; min-height: 1.4em; }
+.rps-guess { color: var(--pencil); }
+.rps-label { margin: 6px 0 4px; font-family: var(--mono); font-size: 0.82rem; color: var(--pencil); }
+.rps-bars { margin-bottom: 8px; }
+.rps-bars .nw-bar { grid-template-columns: 6.5em 1fr 3em; }
+.rps-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0; }
+.rps-stats div { display: grid; gap: 2px; }
+.rps-stats span { font-size: 0.75rem; color: var(--pencil); }
+.rps-stats b { font-family: var(--mono); font-size: 1.15rem; }
+.rps-spark { width: 100%; height: 54px; display: block; margin-top: 4px; }
+.rps-spark .base { stroke: color-mix(in srgb, var(--ink) 30%, transparent); stroke-dasharray: 4 4; }
+.rps-spark text { font-family: var(--mono); font-size: 9px; fill: var(--pencil); }
+.rps-spark .acc { fill: none; stroke: var(--good); stroke-width: 2; }
+.rps-note { margin: 6px 0 0; font-size: 0.8rem; color: var(--pencil); }
