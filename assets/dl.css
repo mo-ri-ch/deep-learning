@@ -135,3 +135,15 @@
 .rps-spark text { font-family: var(--mono); font-size: 9px; fill: var(--pencil); }
 .rps-spark .acc { fill: none; stroke: var(--good); stroke-width: 2; }
 .rps-note { margin: 6px 0 0; font-size: 0.8rem; color: var(--pencil); }
+
+/* Home: "What you need" as a sticky note (the same look as the course home pages) */
+.hero .need { position: relative; margin-top: 28px; padding: 22px 22px 14px; background: var(--note-yellow); color: var(--ink);
+  border-radius: 2px 2px 6px 2px; transform: rotate(-0.6deg); box-shadow: 0 14px 22px -14px rgba(20,24,50,.45); }
+.hero .need::before { content: ""; position: absolute; top: -12px; left: 40px; width: 90px; height: 24px; background: var(--tape); transform: rotate(-3deg); }
+.hero .need .cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; }
+.hero .need h3 { font-size: 1.35rem; margin: 0 0 8px; }
+.hero .need ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: 0.95rem; }
+.hero .need li { display: grid; grid-template-columns: 1.4em 1fr; }
+.hero .need .yes { color: var(--good); font-weight: 700; }
+.hero .need .no { color: var(--redpen); font-weight: 700; }
+@media (max-width: 520px) { .hero .need .cols { grid-template-columns: 1fr; } }
