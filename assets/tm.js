@@ -25,6 +25,7 @@ function setup() {
         <p class="tm-small">Runs on this laptop. No photos are sent anywhere.</p>
       </div>
       <div class="tm-guess" aria-live="polite"></div>
+      <button type="button" class="tm-stop" hidden aria-label="Turn the camera off">■ Camera off</button>
     </div>
     <p class="tm-step">Then hold each button while you show that hand, about 3 seconds each.</p>
     <div class="tm-classes">${CLASSES.map(([k, name], i) => `
@@ -37,6 +38,7 @@ function setup() {
     <p class="tm-how"><span class="peekword" data-peek="A network already trained on millions of photos (MobileNet) turns each camera frame into a list of 1,024 numbers that describe what it sees. Holding a button stores those numbers with your label. To guess, it finds the ${K} stored examples closest to the new frame and lets them vote. That's transfer learning in its simplest form. In Lab 3 you train a real last layer instead.">How does it learn so fast? 🤔</span></p>`;
 
   const video = box.querySelector(".tm-video"), cover = box.querySelector(".tm-cover"), start = box.querySelector(".tm-start");
+  const stopBtn = box.querySelector(".tm-stop");
   const status = box.querySelector(".tm-status"), guessEl = box.querySelector(".tm-guess");
   const holds = [...box.querySelectorAll(".tm-hold")];
   const examples = { rock: [], paper: [], scissors: [] };
@@ -62,6 +64,8 @@ function setup() {
     video.srcObject = stream;
     try { await video.play(); } catch (e) { /* autoplay rules: it's muted and started by a click */ }
     cover.hidden = true;
+    stopBtn.hidden = false;
+    if (embedder) return resume();
     try {
       say("Loading the pretrained network (a few seconds)…");
       const { FilesetResolver, ImageEmbedder } = await import(`${LIB}/vision_bundle.mjs`);
@@ -73,17 +77,37 @@ function setup() {
       stop();
       return fallback("The pretrained network couldn't load on this connection.");
     }
-    holds.forEach((h) => (h.disabled = false));
     say("Ready. Hold Rock while you show a fist.");
-    running = true;
-    requestAnimationFrame(loop);
+    resume();
   };
+  function resume() {
+    holds.forEach((h) => (h.disabled = false));
+    running = true;
+    draw();
+    requestAnimationFrame(loop);
+  }
 
   function stop() {
-    running = false;
+    running = false; holding = null;
     if (stream) stream.getTracks().forEach((t) => t.stop());
     stream = null;
+    video.srcObject = null;
   }
+  // Camera off: the light goes out; what it learned stays, so Start camera carries on
+  function cameraOff(why) {
+    if (!stream) return;
+    stop();
+    stopBtn.hidden = true;
+    holds.forEach((h) => (h.disabled = true));
+    guessEl.textContent = "";
+    start.disabled = false; start.textContent = "Start camera";
+    cover.querySelector(".tm-small").textContent = why || "Camera off. What it learned is kept.";
+    cover.hidden = false;
+    say("");
+  }
+  stopBtn.onclick = () => cameraOff();
+  // Switching to another tab (say, Colab) turns the camera off too
+  document.addEventListener("visibilitychange", () => { if (document.hidden) cameraOff("Camera turned off while you were away. What it learned is kept."); });
 
   // One embedding about every 100 ms: store it while a button is held, otherwise guess
   function loop(now) {
@@ -157,5 +181,5 @@ function setup() {
     chances = null; holding = null; draw();
     if (embedder) say("Cleared. Hold Rock while you show a fist.");
   });
-  window.addEventListener("pagehide", stop);
+  window.addEventListener("pagehide", () => cameraOff());
 }

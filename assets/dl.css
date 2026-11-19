@@ -142,6 +142,8 @@
 .tm-small { font-size: 0.85rem; opacity: 0.8; }
 .tm-guess { position: absolute; left: 10px; bottom: 10px; padding: 4px 12px; border-radius: 999px; background: var(--paper); color: var(--ink); font-family: var(--head); font-size: 1.3rem; }
 .tm-guess:empty { display: none; }
+.tm-stop { position: absolute; right: 10px; top: 10px; padding: 4px 10px; font-size: 0.8rem; border-radius: 999px; background: var(--paper); color: var(--ink); }
+.tm-stop[hidden] { display: none; }
 .tm-step { margin: 0 0 6px; font-size: 0.9rem; color: var(--pencil); }
 .tm-classes { display: grid; gap: 6px; }
 .tm-hold { display: grid; grid-template-columns: 7.5em 6.5em 1fr 3em; align-items: center; gap: 10px; text-align: left; padding: 7px 10px; user-select: none; touch-action: none; }
